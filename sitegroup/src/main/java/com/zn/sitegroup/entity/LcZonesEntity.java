@@ -1,6 +1,6 @@
 package com.zn.sitegroup.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +17,8 @@ public class LcZonesEntity {
     private String countryCode;
     private String code;
     private String name;
-    private Timestamp dateUpdated;
-    private Timestamp dateCreated;
+    private Date dateUpdated;
+    private Date dateCreated;
 
     @Id
     @Column(name = "id")
@@ -62,21 +62,21 @@ public class LcZonesEntity {
 
     @Basic
     @Column(name = "date_updated")
-    public Timestamp getDateUpdated() {
+    public Date getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(Timestamp dateUpdated) {
+    public void setDateUpdated(Date dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
 
     @Basic
     @Column(name = "date_created")
-    public Timestamp getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
+    public void setDateCreated(java.util.Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 

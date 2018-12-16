@@ -1,6 +1,6 @@
 package com.zn.sitegroup.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,8 +23,8 @@ public class LcCategoriesEntity {
     private String keywords;
     private String image;
     private byte priority;
-    private Timestamp dateUpdated;
-    private Timestamp dateCreated;
+    private Date dateUpdated;
+    private Date dateCreated;
 
     @Id
     @Column(name = "id")
@@ -128,21 +128,21 @@ public class LcCategoriesEntity {
 
     @Basic
     @Column(name = "date_updated")
-    public Timestamp getDateUpdated() {
+    public Date getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(Timestamp dateUpdated) {
+    public void setDateUpdated(Date dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
 
     @Basic
     @Column(name = "date_created")
-    public Timestamp getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 

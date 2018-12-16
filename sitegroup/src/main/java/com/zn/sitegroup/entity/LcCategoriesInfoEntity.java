@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import static com.zn.sitegroup.utils.StringUtil.escapeSingleQuotes;
 
 /**
  * Created by zn on 2018/12/13.
@@ -55,7 +56,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "name")
     public String getName() {
-        return name;
+        return escapeSingleQuotes(name);
     }
 
     public void setName(String name) {
@@ -65,7 +66,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "short_description")
     public String getShortDescription() {
-        return shortDescription;
+        return escapeSingleQuotes(shortDescription);
     }
 
     public void setShortDescription(String shortDescription) {
@@ -75,7 +76,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "description")
     public String getDescription() {
-        return description;
+        return escapeSingleQuotes(description);
     }
 
     public void setDescription(String description) {
@@ -85,7 +86,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "head_title")
     public String getHeadTitle() {
-        return headTitle;
+        return escapeSingleQuotes(headTitle);
     }
 
     public void setHeadTitle(String headTitle) {
@@ -95,7 +96,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "h1_title")
     public String getH1Title() {
-        return h1Title;
+        return escapeSingleQuotes(h1Title);
     }
 
     public void setH1Title(String h1Title) {
@@ -105,7 +106,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "meta_description")
     public String getMetaDescription() {
-        return metaDescription;
+        return escapeSingleQuotes(metaDescription);
     }
 
     public void setMetaDescription(String metaDescription) {

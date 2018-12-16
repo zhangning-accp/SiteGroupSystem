@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import static com.zn.sitegroup.utils.StringUtil.escapeSingleQuotes;
 
 /**
  * Created by zn on 2018/12/13.
@@ -50,7 +51,7 @@ public class LcProductGroupsValuesInfoEntity {
     @Basic
     @Column(name = "name")
     public String getName() {
-        return name;
+        return escapeSingleQuotes(name);
     }
 
     public void setName(String name) {
