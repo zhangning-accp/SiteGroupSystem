@@ -10,6 +10,11 @@ import com.zn.sitegroup.entity.LcProductGroupsEntity;
 import com.zn.sitegroup.entity.LcProductGroupsInfoEntity;
 import com.zn.sitegroup.entity.LcProductGroupsValuesEntity;
 import com.zn.sitegroup.entity.LcProductGroupsValuesInfoEntity;
+import com.zn.sitegroup.entity.LcProductOptionTreesEntity;
+import com.zn.sitegroup.entity.LcProductsCampaignsEntity;
+import com.zn.sitegroup.entity.LcProductsEntity;
+import com.zn.sitegroup.entity.LcProductsImagesEntity;
+import com.zn.sitegroup.entity.LcProductsInfoEntity;
 import com.zn.sitegroup.repository.ICategoryInfoRepository;
 import com.zn.sitegroup.repository.ICategoryRepository;
 import com.zn.sitegroup.repository.IOptionGroupInfoRepository;
@@ -584,6 +589,275 @@ public class CreateAssignDataSqlFileService {
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Test pass
+     * 输出product_option_trees表里的所有数据到sql文件
+     * @param sqlTemplatePath
+     * @param sqlFilePath
+     */
+    public void createAllProductOptionTreesInfoSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        if(StringUtil.isBlank(sqlTemplatePath)) {
+            sqlTemplatePath = "sitegroup/sql_template";
+        }
+        if(StringUtil.isBlank(sqlFilePath)) {
+            sqlFilePath = "product_option_trees.sql";
+        }
+        long start = System.currentTimeMillis();
+        Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+        try {
+            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+            freemarkerConfiguration.setDefaultEncoding("UTF-8");
+            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Template freeTemplate = freemarkerConfiguration.getTemplate("product_option_trees.ftl");
+            log.info("开始获取info数据");
+            List<LcProductOptionTreesEntity> datas = productOptionTreeRepository.findAll();
+            if(datas.size() > 0) {
+                long end = System.currentTimeMillis();
+                log.info("获取数据消耗：{}", end - start);
+                long end1 = System.currentTimeMillis();
+                log.info("整理数据消耗：{}", end1 - end);
+                Map datasMap = new HashMap();
+                datasMap.put("datas", datas);
+                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
+                end = System.currentTimeMillis();
+                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath)));
+                end1 = System.currentTimeMillis();
+                log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
+                end = System.currentTimeMillis();
+                log.info("消毁list完毕，耗时：{}", end - end1);
+
+                long end5 = System.currentTimeMillis();
+                System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test pass
+     * 输出products表里的所有数据到sql文件
+     * @param sqlTemplatePath
+     * @param sqlFilePath
+     */
+    public void createAllProductsSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        if(StringUtil.isBlank(sqlTemplatePath)) {
+            sqlTemplatePath = "sitegroup/sql_template";
+        }
+        if(StringUtil.isBlank(sqlFilePath)) {
+            sqlFilePath = "products.sql";
+        }
+        long start = System.currentTimeMillis();
+        Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+        try {
+            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+            freemarkerConfiguration.setDefaultEncoding("UTF-8");
+            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Template freeTemplate = freemarkerConfiguration.getTemplate("products.ftl");
+            List<LcProductsEntity> datas = productRepository.findAll();
+            int count = datas.size();
+            int rows = 1000;
+            int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
+            List<LcProductsEntity> data = null;
+            for(int i = 0; i < loop; i ++) {
+                int startIndex = rows * i;
+                int endIndex = startIndex + rows;
+                if(endIndex > datas.size()) {
+                    endIndex = datas.size();
+                }
+                if(startIndex > datas.size()) {
+                    startIndex = datas.size() - 1;
+                }
+                if(endIndex == startIndex) {
+                    break;
+                }
+                data = datas.subList(startIndex,endIndex);
+                Map datasMap = new HashMap();
+                datasMap.put("datas",data);
+                freeTemplate.process(datasMap,new FileWriter(new File(sqlFilePath),true));
+            }
+            long end5 = System.currentTimeMillis();
+//            datas.clear();
+            System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Test pass
+     * 输出products_info表里的所有数据到sql文件
+     * @param sqlTemplatePath
+     * @param sqlFilePath
+     * 该方法会将数据拆分成每份1000.
+     */
+    public void createAllProductsInfoSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        if(StringUtil.isBlank(sqlTemplatePath)) {
+            sqlTemplatePath = "sitegroup/sql_template";
+        }
+        if(StringUtil.isBlank(sqlFilePath)) {
+            sqlFilePath = "products_info.sql";
+        }
+        long start = System.currentTimeMillis();
+        Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+        try {
+            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+            freemarkerConfiguration.setDefaultEncoding("UTF-8");
+            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Template freeTemplate = freemarkerConfiguration.getTemplate("products_info.ftl");
+            List<LcProductsInfoEntity> datas = productInfoRepository.findAll();
+            datas = datas.stream().map(p->{
+                String name = StringUtil.escapeSingleQuotes(p.getName());
+                String shortDescription = StringUtil.escapeSingleQuotes(p.getShortDescription());
+                String description = StringUtil.escapeSingleQuotes(p.getDescription());
+                String headTitle = StringUtil.escapeSingleQuotes(p.getHeadTitle());
+                String metaDescription = StringUtil.escapeSingleQuotes(p.getMetaDescription());
+                String attributes = StringUtil.escapeSingleQuotes(p.getAttributes());
+                p.setName(name);
+                p.setShortDescription(shortDescription);
+                p.setDescription(description);
+                p.setHeadTitle(headTitle);
+                p.setMetaDescription(metaDescription);
+                p.setAttributes(attributes);
+                return p;
+            }).collect(Collectors.toList());
+            int count = datas.size();
+            int rows = 1000;
+            int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
+            List<LcProductsInfoEntity> data = null;
+            for(int i = 0; i < loop; i ++) {
+                int startIndex = rows * i;
+                int endIndex = startIndex + rows;
+                if(endIndex > datas.size()) {
+                    endIndex = datas.size();
+                }
+                if(startIndex > datas.size()) {
+                    startIndex = datas.size() - 1;
+                }
+                if(endIndex == startIndex) {
+                    break;
+                }
+                data = datas.subList(startIndex,endIndex);
+                Map datasMap = new HashMap();
+                datasMap.put("datas",data);
+                freeTemplate.process(datasMap,new FileWriter(new File(sqlFilePath),true));
+            }
+            long end5 = System.currentTimeMillis();
+            datas.clear();
+            System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Test pass
+     * 输出products_campaigns表里的所有数据到sql文件
+     * @param sqlTemplatePath
+     * @param sqlFilePath
+     * 该方法会将数据拆分成每份1000.
+     */
+    public void createAllProductsCampaignsSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        if(StringUtil.isBlank(sqlTemplatePath)) {
+            sqlTemplatePath = "sitegroup/sql_template";
+        }
+        if(StringUtil.isBlank(sqlFilePath)) {
+            sqlFilePath = "products_campaigns.sql";
+        }
+        long start = System.currentTimeMillis();
+        Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+        try {
+            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+            freemarkerConfiguration.setDefaultEncoding("UTF-8");
+            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Template freeTemplate = freemarkerConfiguration.getTemplate("products_campaigns.ftl");
+            List<LcProductsCampaignsEntity> datas = productCampaignRepository.findAll();
+            int count = datas.size();
+            int rows = 1000;
+            int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
+            List<LcProductsCampaignsEntity> data = null;
+            for(int i = 0; i < loop; i ++) {
+                int startIndex = rows * i;
+                int endIndex = startIndex + rows;
+                if(endIndex > datas.size()) {
+                    endIndex = datas.size();
+                }
+                if(startIndex > datas.size()) {
+                    startIndex = datas.size() - 1;
+                }
+                if(endIndex == startIndex) {
+                    break;
+                }
+                data = datas.subList(startIndex,endIndex);
+                Map datasMap = new HashMap();
+                datasMap.put("datas",data);
+                freeTemplate.process(datasMap,new FileWriter(new File(sqlFilePath),true));
+            }
+            long end5 = System.currentTimeMillis();
+//            datas.clear();
+            System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Test pass
+     * 输出products_images表里的所有数据到sql文件
+     * @param sqlTemplatePath
+     * @param sqlFilePath
+     * 该方法会将数据拆分成每份1000.
+     */
+    public void createAllProductsImagesSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        if(StringUtil.isBlank(sqlTemplatePath)) {
+            sqlTemplatePath = "sitegroup/sql_template";
+        }
+        if(StringUtil.isBlank(sqlFilePath)) {
+            sqlFilePath = "products_images.sql";
+        }
+        long start = System.currentTimeMillis();
+        Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+        try {
+            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+            freemarkerConfiguration.setDefaultEncoding("UTF-8");
+            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Template freeTemplate = freemarkerConfiguration.getTemplate("products_images.ftl");
+            List<LcProductsImagesEntity> datas = productImageRepository.findAll();
+            int count = datas.size();
+            int rows = 1000;
+            int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
+            List<LcProductsImagesEntity> data = null;
+            for(int i = 0; i < loop; i ++) {
+                int startIndex = rows * i;
+                int endIndex = startIndex + rows;
+                if(endIndex > datas.size()) {
+                    endIndex = datas.size();
+                }
+                if(startIndex > datas.size()) {
+                    startIndex = datas.size() - 1;
+                }
+                if(endIndex == startIndex) {
+                    break;
+                }
+                data = datas.subList(startIndex,endIndex);
+                Map datasMap = new HashMap();
+                datasMap.put("datas",data);
+                freeTemplate.process(datasMap,new FileWriter(new File(sqlFilePath),true));
+            }
+            long end5 = System.currentTimeMillis();
+//            datas.clear();
+            System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TemplateException e) {

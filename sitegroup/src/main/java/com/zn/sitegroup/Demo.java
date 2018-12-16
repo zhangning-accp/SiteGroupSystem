@@ -164,7 +164,12 @@ public class Demo {
 //        createAssignDataSqlFileService.createAllProductGroupsSqlFile(null,"d:/sql-test/product_groups.sql");
 //            createAssignDataSqlFileService.createAllProductGroupsInfoSqlFile(null,"d:/sql-test/product_groups_info.sql");
 //        createAssignDataSqlFileService.createAllProductGroupsValuesSqlFile(null,"d:/sql-test/product_groups_values.sql");
-        createAssignDataSqlFileService.createAllProductGroupsValuesInfoSqlFile(null,"d:/sql-test/product_groups_values_info.sql");
+//        createAssignDataSqlFileService.createAllProductGroupsValuesInfoSqlFile(null,"d:/sql-test/product_groups_values_info.sql");
+//        createAssignDataSqlFileService.createAllProductOptionTreesInfoSqlFile(null,"d:/sql-test/product_option_trees.sql");
+//        createAssignDataSqlFileService.createAllProductsSqlFile(null,"d:/sql-test/products.sql");
+//        createAssignDataSqlFileService.createAllProductsInfoSqlFile(null,"d:/sql-test/products_info.sql");
+//        createAssignDataSqlFileService.createAllProductsCampaignsSqlFile(null,"d:/sql-test/products_campaigns.sql");
+        createAssignDataSqlFileService.createAllProductsImagesSqlFile(null,"d:/sql-test/products_images.sql");
 
     }
 

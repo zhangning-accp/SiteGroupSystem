@@ -1,13 +1,13 @@
 <#setting number_format="#">
 REPLACE INTO `lc_products_info` VALUES
-    <#list productsInfo as info>
-        <#if info?is_last>
-            (${info.id},${info.productId},'${info.languageCode}',
-            '${info.name}','${info.shortDescription}','${info.description}',
-            '${info.headTitle}','${info.metaDescription}','${info.attributes}');
+    <#list datas as data>
+        <#if data?is_last>
+            (${data.id},${data.productId},'${data.languageCode}',
+            '${data.name}','${data.shortDescription}','${data.description}',
+            '${data.headTitle}','${data.metaDescription}','${data.attributes}');
         <#else>
-            (${info.id},${info.productId},'${info.languageCode}',
-            '${info.name}','${info.shortDescription}','${info.description}',
-            '${info.headTitle}','${info.metaDescription}','${info.attributes}'),
+            (${data.id},${data.productId},'${data.languageCode}',
+            '${data.name}','${data.shortDescription}','${data.description}',
+            '${data.headTitle}','${data.metaDescription}','${data.attributes}'),
         </#if>
     </#list>
