@@ -1,12 +1,12 @@
 <#setting number_format="#">
 REPLACE INTO `lc_categories_info` VALUES
-<#list categoriesInfo as categoryInfo>
-    <#if categoryInfo?is_last>
-        (${categoryInfo.id},${categoryInfo.categoryId},'${categoryInfo.languageCode}','${categoryInfo.name}',
-        '${categoryInfo.shortDescription}','${categoryInfo.description}','${categoryInfo.headTitle}','${categoryInfo.h1Title}','${categoryInfo.metaDescription}');
+<#list datas as data>
+    <#if data?is_last>
+        (${data.id},${data.categoryId},'${data.languageCode}','${data.name}',
+        '${data.shortDescription}','${data.description}','${data.headTitle}','${data.h1Title}','${data.metaDescription}');
     <#else>
-    (${categoryInfo.id},${categoryInfo.categoryId},'${categoryInfo.languageCode}','${categoryInfo.name}',
-    '${categoryInfo.shortDescription}','${categoryInfo.description}','${categoryInfo.headTitle}','${categoryInfo.h1Title}','${categoryInfo.metaDescription}'),
+    (${data.id},${data.categoryId},'${data.languageCode}','${data.name}',
+    '${data.shortDescription}','${data.description}','${data.headTitle}','${data.h1Title}','${data.metaDescription}'),
     </#if>
 </#list>
 

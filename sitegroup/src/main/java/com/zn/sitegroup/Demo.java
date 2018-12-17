@@ -14,9 +14,11 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -154,7 +156,8 @@ public class Demo {
         }
     }
 
-    public void outCategoriesSQL() {
+    public void outSQL() {
+        String sqlFile = "d:/sql-test/assgin_product.sql";
 //      createAssignDataSqlFileService.createAllCategorySqlFile(null,"D:/sql-test/categories.sql");
 //      createAssignDataSqlFileService.createAllCategoryInfoSqlFile(null,"D:/sql-test/categories_info.sql");
 //        createAssignDataSqlFileService.createAllOptionGroupsSqlFile(null,"D:/sql-test/option_groups.sql");
@@ -169,7 +172,63 @@ public class Demo {
 //        createAssignDataSqlFileService.createAllProductsSqlFile(null,"d:/sql-test/products.sql");
 //        createAssignDataSqlFileService.createAllProductsInfoSqlFile(null,"d:/sql-test/products_info.sql");
 //        createAssignDataSqlFileService.createAllProductsCampaignsSqlFile(null,"d:/sql-test/products_campaigns.sql");
-        createAssignDataSqlFileService.createAllProductsImagesSqlFile(null,"d:/sql-test/products_images.sql");
+//        createAssignDataSqlFileService.createAllProductsImagesSqlFile(null,"d:/sql-test/products_images.sql");
+//            createAssignDataSqlFileService.createAllProductsOptionsSqlFile(null,"d:/sql-test/products_options.sql");
+//        createAssignDataSqlFileService.createAllProductsOptionsStockSqlFile(null,"d:/sql-test/products_options_stock.sql");
+//        createAssignDataSqlFileService.createAllProductsPricesSqlFile(null,"d:/sql-test/products_prices.sql");
+//        createAssignDataSqlFileService.createAllProductsToCategoriesSqlFile(null,"d:/sql-test/products_to_categories.sql");
+
+        long start = System.currentTimeMillis();
+        createAssignDataSqlFileService.createAllCategorySqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllCategoryInfoSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllOptionGroupsSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllOptionGroupsInfoSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllOptionValuesSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllOptionValuesInfoSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductGroupsSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductGroupsInfoSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductGroupsValuesSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductGroupsValuesInfoSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductOptionTreesInfoSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductsSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductsInfoSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductsCampaignsSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductsImagesSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductsOptionsSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductsOptionsStockSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductsPricesSqlFile(null,sqlFile);
+        createAssignDataSqlFileService.createAllProductsToCategoriesSqlFile(null,sqlFile);
+        long end = System.currentTimeMillis();
+        log.info("生成sql文件总耗时:{}分钟",(end-start)/(1000*60.0));
+        log.info("开始执行导入sql....");
+        Runtime runtime = Runtime.getRuntime();
+        String cmdarray[] = { "mysql -uroot litecart_no_data<d:/sql-test/assgin_product.sql"};
+        Process process = null;
+        BufferedReader br = null;
+        try {
+            process = runtime.exec("cmd /c " + cmdarray[0]);// cmd之后执行数组的第一个条件进入数据库
+
+            br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            System.out.println(sb.toString());
+            long end1 = System.currentTimeMillis();
+            log.info("sql执行结束，耗时{}",end - end);
+            log.info("全部总耗时:{}分钟",((end1 - start)/1000)/60.0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            process.destroy();
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 
     }
 
@@ -183,6 +242,6 @@ public class Demo {
 //        if(scanner.next() != null) {
 //            demo.outGreatSqlByFreeMarkerGreat();
 //        }
-            demo.outCategoriesSQL();
+            demo.outSQL();
     }
 }

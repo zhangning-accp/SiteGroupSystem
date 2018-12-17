@@ -15,6 +15,10 @@ import com.zn.sitegroup.entity.LcProductsCampaignsEntity;
 import com.zn.sitegroup.entity.LcProductsEntity;
 import com.zn.sitegroup.entity.LcProductsImagesEntity;
 import com.zn.sitegroup.entity.LcProductsInfoEntity;
+import com.zn.sitegroup.entity.LcProductsOptionsEntity;
+import com.zn.sitegroup.entity.LcProductsOptionsStockEntity;
+import com.zn.sitegroup.entity.LcProductsPricesEntity;
+import com.zn.sitegroup.entity.LcProductsToCategoriesEntity;
 import com.zn.sitegroup.repository.ICategoryInfoRepository;
 import com.zn.sitegroup.repository.ICategoryRepository;
 import com.zn.sitegroup.repository.IOptionGroupInfoRepository;
@@ -141,21 +145,21 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setDefaultEncoding("UTF-8");
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("categories.ftl");
-            log.info("开始获取info数据");
-            List<LcCategoriesEntity> categoriesEntityList = categoryRepository.findAll();
+//            log.info("开始获取info数据");
+            List<LcCategoriesEntity> datas = categoryRepository.findAll();
             long end = System.currentTimeMillis();
             log.info("获取数据消耗：{}",end - start);
             long end1 = System.currentTimeMillis();
-            log.info("整理数据消耗：{}",end1 - end);
-            Map datas = new HashMap();
-            datas.put("categories",categoriesEntityList);
-            log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...",categoriesEntityList.size(),end1-end);
+//            log.info("整理数据消耗：{}",end1 - end);
+            Map dataMap = new HashMap();
+            dataMap.put("datas",datas);
+//            log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...",categoriesEntityList.size(),end1-end);
             end = System.currentTimeMillis();
-            freeTemplate.process(datas,new FileWriter(new File(sqlFilePath)));
+            freeTemplate.process(dataMap,new FileWriter(new File(sqlFilePath),true));
             end1 = System.currentTimeMillis();
-            log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}",end1 - end);
-            end = System.currentTimeMillis();
-            log.info("消毁list完毕，耗时：{}",end - end1);
+            log.info("输出完毕，耗时：{}",end1 - end);
+//            end = System.currentTimeMillis();
+//            log.info("消毁list完毕，耗时：{}",end - end1);
 
             long end5 = System.currentTimeMillis();
             System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -188,21 +192,21 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setDefaultEncoding("UTF-8");
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("categories_info.ftl");
-            log.info("开始获取info数据");
-            List<LcCategoriesInfoEntity> categoriesInfoEntityList = categoryInfoRepository.findAll();
+//            log.info("开始获取info数据");
+            List<LcCategoriesInfoEntity> datas = categoryInfoRepository.findAll();
             long end = System.currentTimeMillis();
             log.info("获取数据消耗：{}",end - start);
             long end1 = System.currentTimeMillis();
-            log.info("整理数据消耗：{}",end1 - end);
-            Map datas = new HashMap();
-            datas.put("categoriesInfo",categoriesInfoEntityList);
-            log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...",categoriesInfoEntityList.size(),end1-end);
+//            log.info("整理数据消耗：{}",end1 - end);
+            Map dataMap = new HashMap();
+            dataMap.put("datas",datas);
+//            log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...",categoriesInfoEntityList.size(),end1-end);
             end = System.currentTimeMillis();
-            freeTemplate.process(datas,new FileWriter(new File(sqlFilePath)));
+            freeTemplate.process(dataMap,new FileWriter(new File(sqlFilePath),true));
             end1 = System.currentTimeMillis();
-            log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}",end1 - end);
+            log.info("输出完毕耗时：{}",end1 - end);
             end = System.currentTimeMillis();
-            log.info("消毁list完毕，耗时：{}",end - end1);
+//            log.info("消毁list完毕，耗时：{}",end - end1);
 
             long end5 = System.currentTimeMillis();
             System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -234,22 +238,22 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setDefaultEncoding("UTF-8");
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("option_groups.ftl");
-            log.info("开始获取info数据");
-            List<LcOptionGroupsEntity> optionGroupsEntityList = optionGroupRepository.findAll();
-            if(optionGroupsEntityList.size() > 0) {
+//            log.info("开始获取info数据");
+            List<LcOptionGroupsEntity> datas = optionGroupRepository.findAll();
+            if(datas.size() > 0) {
                 long end = System.currentTimeMillis();
                 log.info("获取数据消耗：{}", end - start);
                 long end1 = System.currentTimeMillis();
-                log.info("整理数据消耗：{}", end1 - end);
-                Map datas = new HashMap();
-                datas.put("optionGroups", optionGroupsEntityList);
-                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", optionGroupsEntityList.size(), end1 - end);
+//                log.info("整理数据消耗：{}", end1 - end);
+                Map dataMap = new HashMap();
+                dataMap.put("datas", datas);
+//                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
                 end = System.currentTimeMillis();
-                freeTemplate.process(datas, new FileWriter(new File(sqlFilePath)));
+                freeTemplate.process(dataMap, new FileWriter(new File(sqlFilePath),true));
                 end1 = System.currentTimeMillis();
                 log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
                 end = System.currentTimeMillis();
-                log.info("消毁list完毕，耗时：{}", end - end1);
+//                log.info("消毁list完毕，耗时：{}", end - end1);
 
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -287,16 +291,16 @@ public class CreateAssignDataSqlFileService {
                 long end = System.currentTimeMillis();
                 log.info("获取数据消耗：{}", end - start);
                 long end1 = System.currentTimeMillis();
-                log.info("整理数据消耗：{}", end1 - end);
+//                log.info("整理数据消耗：{}", end1 - end);
                 Map dataMap = new HashMap();
                 dataMap.put("datas", datas);
-                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
+//                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
                 end = System.currentTimeMillis();
-                freeTemplate.process(datas, new FileWriter(new File(sqlFilePath)));
+                freeTemplate.process(dataMap, new FileWriter(new File(sqlFilePath),true));
                 end1 = System.currentTimeMillis();
                 log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
                 end = System.currentTimeMillis();
-                log.info("消毁list完毕，耗时：{}", end - end1);
+//                log.info("消毁list完毕，耗时：{}", end - end1);
 
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -329,22 +333,22 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setDefaultEncoding("UTF-8");
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("option_values.ftl");
-            log.info("开始获取info数据");
-            List<LcOptionValuesEntity> optionValuesEntityList = optionValueRepository.findAll();
-            if(optionValuesEntityList.size() > 0) {
+//            log.info("开始获取info数据");
+            List<LcOptionValuesEntity> datas = optionValueRepository.findAll();
+            if(datas.size() > 0) {
                 long end = System.currentTimeMillis();
                 log.info("获取数据消耗：{}", end - start);
                 long end1 = System.currentTimeMillis();
-                log.info("整理数据消耗：{}", end1 - end);
-                Map datas = new HashMap();
-                datas.put("optionValues", optionValuesEntityList);
-                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", optionValuesEntityList.size(), end1 - end);
+//                log.info("整理数据消耗：{}", end1 - end);
+                Map dataMap = new HashMap();
+                dataMap.put("datas", datas);
+//                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", optionValuesEntityList.size(), end1 - end);
                 end = System.currentTimeMillis();
-                freeTemplate.process(datas, new FileWriter(new File(sqlFilePath)));
+                freeTemplate.process(dataMap, new FileWriter(new File(sqlFilePath),true));
                 end1 = System.currentTimeMillis();
                 log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
                 end = System.currentTimeMillis();
-                log.info("消毁list完毕，耗时：{}", end - end1);
+//                log.info("消毁list完毕，耗时：{}", end - end1);
 
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -377,22 +381,22 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setDefaultEncoding("UTF-8");
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("option_values_info.ftl");
-            log.info("开始获取info数据");
+//            log.info("开始获取info数据");
             List<LcOptionValuesInfoEntity> datas = optionValueInfoRepository.findAll();
             if(datas.size() > 0) {
                 long end = System.currentTimeMillis();
                 log.info("获取数据消耗：{}", end - start);
                 long end1 = System.currentTimeMillis();
-                log.info("整理数据消耗：{}", end1 - end);
+//                log.info("整理数据消耗：{}", end1 - end);
                 Map datasMap = new HashMap();
-                datasMap.put("optionValuesInfo", datas);
-                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
+                datasMap.put("datas", datas);
+//                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
                 end = System.currentTimeMillis();
-                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath)));
+                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath),true));
                 end1 = System.currentTimeMillis();
                 log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
                 end = System.currentTimeMillis();
-                log.info("消毁list完毕，耗时：{}", end - end1);
+//                log.info("消毁list完毕，耗时：{}", end - end1);
 
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -431,16 +435,16 @@ public class CreateAssignDataSqlFileService {
                 long end = System.currentTimeMillis();
                 log.info("获取数据消耗：{}", end - start);
                 long end1 = System.currentTimeMillis();
-                log.info("整理数据消耗：{}", end1 - end);
+//                log.info("整理数据消耗：{}", end1 - end);
                 Map datasMap = new HashMap();
                 datasMap.put("datas", datas);
-                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
+//                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
                 end = System.currentTimeMillis();
-                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath)));
+                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath),true));
                 end1 = System.currentTimeMillis();
                 log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
                 end = System.currentTimeMillis();
-                log.info("消毁list完毕，耗时：{}", end - end1);
+//                log.info("消毁list完毕，耗时：{}", end - end1);
 
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -473,22 +477,22 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setDefaultEncoding("UTF-8");
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("product_groups_info.ftl");
-            log.info("开始获取info数据");
+//            log.info("开始获取info数据");
             List<LcProductGroupsInfoEntity> datas = productGroupInfoRepository.findAll();
             if(datas.size() > 0) {
                 long end = System.currentTimeMillis();
                 log.info("获取数据消耗：{}", end - start);
                 long end1 = System.currentTimeMillis();
-                log.info("整理数据消耗：{}", end1 - end);
+//                log.info("整理数据消耗：{}", end1 - end);
                 Map datasMap = new HashMap();
                 datasMap.put("datas", datas);
-                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
+//                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
                 end = System.currentTimeMillis();
-                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath)));
+                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath),true));
                 end1 = System.currentTimeMillis();
                 log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
                 end = System.currentTimeMillis();
-                log.info("消毁list完毕，耗时：{}", end - end1);
+//                log.info("消毁list完毕，耗时：{}", end - end1);
 
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -527,16 +531,16 @@ public class CreateAssignDataSqlFileService {
                 long end = System.currentTimeMillis();
                 log.info("获取数据消耗：{}", end - start);
                 long end1 = System.currentTimeMillis();
-                log.info("整理数据消耗：{}", end1 - end);
+//                log.info("整理数据消耗：{}", end1 - end);
                 Map datasMap = new HashMap();
                 datasMap.put("datas", datas);
-                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
+//                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
                 end = System.currentTimeMillis();
-                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath)));
+                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath),true));
                 end1 = System.currentTimeMillis();
                 log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
                 end = System.currentTimeMillis();
-                log.info("消毁list完毕，耗时：{}", end - end1);
+//                log.info("消毁list完毕，耗时：{}", end - end1);
 
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -569,22 +573,22 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setDefaultEncoding("UTF-8");
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("product_groups_values_info.ftl");
-            log.info("开始获取info数据");
+//            log.info("开始获取info数据");
             List<LcProductGroupsValuesInfoEntity> datas = productGroupValueInfoRepository.findAll();
             if(datas.size() > 0) {
                 long end = System.currentTimeMillis();
                 log.info("获取数据消耗：{}", end - start);
                 long end1 = System.currentTimeMillis();
-                log.info("整理数据消耗：{}", end1 - end);
+//                log.info("整理数据消耗：{}", end1 - end);
                 Map datasMap = new HashMap();
                 datasMap.put("datas", datas);
                 log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
                 end = System.currentTimeMillis();
-                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath)));
+                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath),true));
                 end1 = System.currentTimeMillis();
                 log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
                 end = System.currentTimeMillis();
-                log.info("消毁list完毕，耗时：{}", end - end1);
+//                log.info("消毁list完毕，耗时：{}", end - end1);
 
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -615,22 +619,22 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setDefaultEncoding("UTF-8");
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("product_option_trees.ftl");
-            log.info("开始获取info数据");
+//            log.info("开始获取info数据");
             List<LcProductOptionTreesEntity> datas = productOptionTreeRepository.findAll();
             if(datas.size() > 0) {
                 long end = System.currentTimeMillis();
                 log.info("获取数据消耗：{}", end - start);
                 long end1 = System.currentTimeMillis();
-                log.info("整理数据消耗：{}", end1 - end);
+//                log.info("整理数据消耗：{}", end1 - end);
                 Map datasMap = new HashMap();
                 datasMap.put("datas", datas);
-                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
+//                log.info("data数据获取完毕，size:{},耗时：{}开始输出成sql文件...", datas.size(), end1 - end);
                 end = System.currentTimeMillis();
-                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath)));
+                freeTemplate.process(datasMap, new FileWriter(new File(sqlFilePath),true));
                 end1 = System.currentTimeMillis();
                 log.info("输出完毕，开始销毁对象....,之前输出到文件耗时：{}", end1 - end);
                 end = System.currentTimeMillis();
-                log.info("消毁list完毕，耗时：{}", end - end1);
+//                log.info("消毁list完毕，耗时：{}", end - end1);
 
                 long end5 = System.currentTimeMillis();
                 System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
@@ -649,13 +653,14 @@ public class CreateAssignDataSqlFileService {
      * @param sqlFilePath
      */
     public void createAllProductsSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        long start = System.currentTimeMillis();
         if(StringUtil.isBlank(sqlTemplatePath)) {
             sqlTemplatePath = "sitegroup/sql_template";
         }
         if(StringUtil.isBlank(sqlFilePath)) {
             sqlFilePath = "products.sql";
         }
-        long start = System.currentTimeMillis();
+
         Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
         try {
             freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
@@ -663,6 +668,8 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("products.ftl");
             List<LcProductsEntity> datas = productRepository.findAll();
+            long end = System.currentTimeMillis();
+            log.info("获取数据消耗:{}",end - start);
             int count = datas.size();
             int rows = 1000;
             int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
@@ -715,6 +722,9 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("products_info.ftl");
             List<LcProductsInfoEntity> datas = productInfoRepository.findAll();
+            long end = System.currentTimeMillis();
+            log.info("获取数据消耗:{}",end - start);
+            start = System.currentTimeMillis();
             datas = datas.stream().map(p->{
                 String name = StringUtil.escapeSingleQuotes(p.getName());
                 String shortDescription = StringUtil.escapeSingleQuotes(p.getShortDescription());
@@ -730,6 +740,8 @@ public class CreateAssignDataSqlFileService {
                 p.setAttributes(attributes);
                 return p;
             }).collect(Collectors.toList());
+            end = System.currentTimeMillis();
+            log.info("整理数据消耗:{}",end - start);
             int count = datas.size();
             int rows = 1000;
             int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
@@ -782,6 +794,8 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("products_campaigns.ftl");
             List<LcProductsCampaignsEntity> datas = productCampaignRepository.findAll();
+            long end = System.currentTimeMillis();
+            log.info("获取数据消耗:{}",end - start);
             int count = datas.size();
             int rows = 1000;
             int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
@@ -834,6 +848,8 @@ public class CreateAssignDataSqlFileService {
             freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             Template freeTemplate = freemarkerConfiguration.getTemplate("products_images.ftl");
             List<LcProductsImagesEntity> datas = productImageRepository.findAll();
+            long end = System.currentTimeMillis();
+            log.info("获取数据消耗:{}",end - start);
             int count = datas.size();
             int rows = 1000;
             int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
@@ -856,7 +872,6 @@ public class CreateAssignDataSqlFileService {
                 freeTemplate.process(datasMap,new FileWriter(new File(sqlFilePath),true));
             }
             long end5 = System.currentTimeMillis();
-//            datas.clear();
             System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
         } catch (IOException e) {
             e.printStackTrace();
@@ -865,4 +880,217 @@ public class CreateAssignDataSqlFileService {
         }
     }
 
+    /**
+     * Test pass
+     * 输出products_options表里的所有数据到sql文件
+     * @param sqlTemplatePath
+     * @param sqlFilePath
+     * 该方法会将数据拆分成每份1000.
+     */
+    public void createAllProductsOptionsSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        if(StringUtil.isBlank(sqlTemplatePath)) {
+            sqlTemplatePath = "sitegroup/sql_template";
+        }
+        if(StringUtil.isBlank(sqlFilePath)) {
+            sqlFilePath = "products_options.sql";
+        }
+        long start = System.currentTimeMillis();
+        Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+        try {
+            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+            freemarkerConfiguration.setDefaultEncoding("UTF-8");
+            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Template freeTemplate = freemarkerConfiguration.getTemplate("products_options.ftl");
+            List<LcProductsOptionsEntity> datas = productOptionRepository.findAll();
+            long end = System.currentTimeMillis();
+            log.info("获取数据消耗:{}",end - start);
+            int count = datas.size();
+            int rows = 1000;
+            int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
+            List<LcProductsOptionsEntity> data = null;
+            for(int i = 0; i < loop; i ++) {
+                int startIndex = rows * i;
+                int endIndex = startIndex + rows;
+                if(endIndex > datas.size()) {
+                    endIndex = datas.size();
+                }
+                if(startIndex > datas.size()) {
+                    startIndex = datas.size() - 1;
+                }
+                if(endIndex == startIndex) {
+                    break;
+                }
+                data = datas.subList(startIndex,endIndex);
+                Map datasMap = new HashMap();
+                datasMap.put("datas",data);
+                freeTemplate.process(datasMap,new FileWriter(new File(sqlFilePath),true));
+            }
+            long end5 = System.currentTimeMillis();
+            System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test pass
+     * 输出products_options_stock表里的所有数据到sql文件
+     * @param sqlTemplatePath
+     * @param sqlFilePath
+     * 该方法会将数据拆分成每份1000.
+     */
+    public void createAllProductsOptionsStockSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        if(StringUtil.isBlank(sqlTemplatePath)) {
+            sqlTemplatePath = "sitegroup/sql_template";
+        }
+        if(StringUtil.isBlank(sqlFilePath)) {
+            sqlFilePath = "products_options_stock.sql";
+        }
+        long start = System.currentTimeMillis();
+        Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+        try {
+            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+            freemarkerConfiguration.setDefaultEncoding("UTF-8");
+            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Template freeTemplate = freemarkerConfiguration.getTemplate("products_options_stock.ftl");
+            List<LcProductsOptionsStockEntity> datas = productOptionStockRepository.findAll();
+            long end = System.currentTimeMillis();
+            log.info("获取数据完成，耗时：{}",end-start);
+            int count = datas.size();
+            int rows = 1000;
+            int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
+            List<LcProductsOptionsStockEntity> data = null;
+            for(int i = 0; i < loop; i ++) {
+                int startIndex = rows * i;
+                int endIndex = startIndex + rows;
+                if(endIndex > datas.size()) {
+                    endIndex = datas.size();
+                }
+                if(startIndex > datas.size()) {
+                    startIndex = datas.size() - 1;
+                }
+                if(endIndex == startIndex) {
+                    break;
+                }
+                data = datas.subList(startIndex,endIndex);
+                Map datasMap = new HashMap();
+                datasMap.put("datas",data);
+                freeTemplate.process(datasMap,new FileWriter(new File(sqlFilePath),true));
+            }
+            long end5 = System.currentTimeMillis();
+            System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Test pass
+     * 输出products_options_stock表里的所有数据到sql文件
+     * @param sqlTemplatePath
+     * @param sqlFilePath
+     * 该方法会将数据拆分成每份1000.
+     */
+    public void createAllProductsPricesSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        if(StringUtil.isBlank(sqlTemplatePath)) {
+            sqlTemplatePath = "sitegroup/sql_template";
+        }
+        if(StringUtil.isBlank(sqlFilePath)) {
+            sqlFilePath = "products_prices.sql";
+        }
+        long start = System.currentTimeMillis();
+        Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+        try {
+            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+            freemarkerConfiguration.setDefaultEncoding("UTF-8");
+            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Template freeTemplate = freemarkerConfiguration.getTemplate("products_prices.ftl");
+            List<LcProductsPricesEntity> datas = productPriceRepository.findAll();
+            long end = System.currentTimeMillis();
+            log.info("获取数据完成，耗时：{}",end-start);
+            int count = datas.size();
+            int rows = 1000;
+            int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
+            List<LcProductsPricesEntity> data = null;
+            for(int i = 0; i < loop; i ++) {
+                int startIndex = rows * i;
+                int endIndex = startIndex + rows;
+                if(endIndex > datas.size()) {
+                    endIndex = datas.size();
+                }
+                if(startIndex > datas.size()) {
+                    startIndex = datas.size() - 1;
+                }
+                if(endIndex == startIndex) {
+                    break;
+                }
+                data = datas.subList(startIndex,endIndex);
+                Map datasMap = new HashMap();
+                datasMap.put("datas",data);
+                freeTemplate.process(datasMap,new FileWriter(new File(sqlFilePath),true));
+            }
+            long end5 = System.currentTimeMillis();
+            System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Test pass
+     * 输出products_to_categories表里的所有数据到sql文件
+     * @param sqlTemplatePath
+     * @param sqlFilePath
+     * 该方法会将数据拆分成每份1000.
+     */
+    public void createAllProductsToCategoriesSqlFile(String sqlTemplatePath,String sqlFilePath) {
+        if(StringUtil.isBlank(sqlTemplatePath)) {
+            sqlTemplatePath = "sitegroup/sql_template";
+        }
+        if(StringUtil.isBlank(sqlFilePath)) {
+            sqlFilePath = "products_to_categories.sql";
+        }
+        long start = System.currentTimeMillis();
+        Configuration freemarkerConfiguration = new Configuration(Configuration.VERSION_2_3_28);
+        try {
+            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+            freemarkerConfiguration.setDefaultEncoding("UTF-8");
+            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            Template freeTemplate = freemarkerConfiguration.getTemplate("products_to_categories.ftl");
+            List<LcProductsToCategoriesEntity> datas = productToCategoryRepository.findAll();
+            long end = System.currentTimeMillis();
+            log.info("获取数据完成，耗时：{}",end-start);
+            int count = datas.size();
+            int rows = 1000;
+            int loop = count % rows == 0 ? count/rows : (count/rows) + 1;
+            List<LcProductsToCategoriesEntity> data = null;
+            for(int i = 0; i < loop; i ++) {
+                int startIndex = rows * i;
+                int endIndex = startIndex + rows;
+                if(endIndex > datas.size()) {
+                    endIndex = datas.size();
+                }
+                if(startIndex > datas.size()) {
+                    startIndex = datas.size() - 1;
+                }
+                if(endIndex == startIndex) {
+                    break;
+                }
+                data = datas.subList(startIndex,endIndex);
+                Map datasMap = new HashMap();
+                datasMap.put("datas",data);
+                freeTemplate.process(datasMap,new FileWriter(new File(sqlFilePath),true));
+            }
+            long end5 = System.currentTimeMillis();
+            System.out.print("----------- 耗时: " + (end5 - start) + " 毫秒---------------");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TemplateException e) {
+            e.printStackTrace();
+        }
+    }
 }
