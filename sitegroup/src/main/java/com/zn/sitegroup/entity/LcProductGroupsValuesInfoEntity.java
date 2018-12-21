@@ -51,7 +51,7 @@ public class LcProductGroupsValuesInfoEntity {
     @Basic
     @Column(name = "name")
     public String getName() {
-        return escapeSingleQuotes(name);
+        return name;
     }
 
     public void setName(String name) {

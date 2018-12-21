@@ -8,5 +8,6 @@ import org.springframework.data.repository.Repository;
  * Created by zn on 2018/12/14.
  */
 public interface IProductInfoRepository extends JpaRepository<LcProductsInfoEntity,Integer> {
+    LcProductsInfoEntity findByProductId(int productId);
 
 }

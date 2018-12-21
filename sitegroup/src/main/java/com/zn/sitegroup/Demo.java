@@ -10,6 +10,7 @@ import com.zn.sitegroup.repository.IProductRepository;
 import com.zn.sitegroup.service.CreateAssignDataSqlFileService;
 import com.zn.sitegroup.service.ProductService;
 import com.zn.sitegroup.utils.StringUtil;
+import com.zn.sitegroup.utils.ZipUnZipUtils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -26,8 +27,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.beetl.core.GroupTemplate;
-import org.beetl.core.resource.FileResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -37,7 +36,6 @@ import org.springframework.stereotype.Component;
  * Created by zn on 2018/12/13.
  */
 @Slf4j
-
 public class Demo {
     @Autowired
     Bean bean;
@@ -49,47 +47,7 @@ public class Demo {
     ICategoryRepository categoryRepository;
     @Autowired
     CreateAssignDataSqlFileService createAssignDataSqlFileService;
-    public void outSqlByBeetl() {
-        long start = System.currentTimeMillis();
-        try {
 
-            FileResourceLoader resourceLoader = new FileResourceLoader("sitegroup/sql_template","utf-8");
-            org.beetl.core.Configuration cfg = org.beetl.core.Configuration.defaultConfiguration();
-            GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
-            org.beetl.core.Template template = gt.getTemplate("beetl_sql.bl");
-
-            log.info("开始获取info数据");
-            List<LcProductsInfoEntity> productsinfo = productInfoRepository.findAll();
-            productsinfo = productsinfo.stream().map(p->{
-                String name = StringUtil.escapeSingleQuotes(p.getName());
-                String shortDescription = StringUtil.escapeSingleQuotes(p.getShortDescription());
-                String description = StringUtil.escapeSingleQuotes(p.getDescription());
-                String headTitle = StringUtil.escapeSingleQuotes(p.getHeadTitle());
-                String metaDescription = StringUtil.escapeSingleQuotes(p.getMetaDescription());
-                String attributes = StringUtil.escapeSingleQuotes(p.getAttributes());
-
-                p.setName(name);
-                p.setShortDescription(shortDescription);
-                p.setDescription(description);
-                p.setHeadTitle(headTitle);
-                p.setMetaDescription(metaDescription);
-                p.setAttributes(attributes);
-
-                return p;
-
-            }).collect(Collectors.toList());
-
-            Map datas = new HashMap();
-            datas.put("productsInfo",productsinfo);
-            log.info("info数据获取完毕，开始输出成sql文件...");
-            template.binding(datas);
-            template.renderTo(new FileWriter(new File("D://sql-test/beetl_test.sql")));
-            long end = System.currentTimeMillis();
-            System.out.print("----------- 耗时: " + (end - start) + " 毫秒---------------");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     // 这个效率更高
     public void outGreatSqlByFreeMarkerGreat() {
         long start = System.currentTimeMillis();
@@ -104,19 +62,7 @@ public class Demo {
 //            long end = System.currentTimeMillis();
 //            log.info("获取数据消耗：{}",end - start);
             productsinfo = productsinfo.stream().map(p->{
-                String name = StringUtil.escapeSingleQuotes(p.getName());
-                String shortDescription = StringUtil.escapeSingleQuotes(p.getShortDescription());
-                String description = StringUtil.escapeSingleQuotes(p.getDescription());
-                String headTitle = StringUtil.escapeSingleQuotes(p.getHeadTitle());
-                String metaDescription = StringUtil.escapeSingleQuotes(p.getMetaDescription());
-                String attributes = StringUtil.escapeSingleQuotes(p.getAttributes());
-                p.setName(name);
-                p.setShortDescription(shortDescription);
-                p.setDescription(description);
-                p.setHeadTitle(headTitle);
-                p.setMetaDescription(metaDescription);
-                p.setAttributes(attributes);
-                return p;
+                return (LcProductsInfoEntity)StringUtil.escapeSingleQuotes(p);
             }).collect(Collectors.toList());
 //            long end1 = System.currentTimeMillis();
 //            log.info("整理数据消耗：{}",end1 - end);
@@ -179,25 +125,25 @@ public class Demo {
 //        createAssignDataSqlFileService.createAllProductsToCategoriesSqlFile(null,"d:/sql-test/products_to_categories.sql");
 
         long start = System.currentTimeMillis();
-        createAssignDataSqlFileService.createAllCategorySqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllCategoryInfoSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllOptionGroupsSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllOptionGroupsInfoSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllOptionValuesSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllOptionValuesInfoSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductGroupsSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductGroupsInfoSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductGroupsValuesSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductGroupsValuesInfoSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductOptionTreesInfoSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductsSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductsInfoSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductsCampaignsSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductsImagesSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductsOptionsSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductsOptionsStockSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductsPricesSqlFile(null,sqlFile);
-        createAssignDataSqlFileService.createAllProductsToCategoriesSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllCategorySqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllCategoryInfoSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllOptionGroupsSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllOptionGroupsInfoSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllOptionValuesSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllOptionValuesInfoSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductGroupsSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductGroupsInfoSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductGroupsValuesSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductGroupsValuesInfoSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductOptionTreesInfoSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductsSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductsInfoSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductsCampaignsSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductsImagesSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductsOptionsSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductsOptionsStockSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductsPricesSqlFile(null,sqlFile);
+//        createAssignDataSqlFileService.createAllProductsToCategoriesSqlFile(null,sqlFile);
         long end = System.currentTimeMillis();
         log.info("生成sql文件总耗时:{}分钟",(end-start)/(1000*60.0));
         log.info("开始执行导入sql....");
@@ -232,9 +178,24 @@ public class Demo {
 
     }
 
-
+    void test() {
+//        List list = cate.findChildParentsByChildId(311);
+//        log.info("size:{}",list);
+        String os = System.getProperty("os.name");
+        System.out.println(os);
+//        createAssignDataSqlFileService.createSqlFileByCategoryID(0);
+//        File file = new File("d:/sql-test/desc/");
+//        File [] files = file.listFiles();
+//        String [] fileStr = new String[files.length];
+//        for(int i = 0; i < files.length; i ++) {
+//            File f = files[i];
+//            fileStr[i] = f.getAbsolutePath();
+//        }
+//        ZipUnZipUtils.zip("d:/sql-test/desc/sql.zip",fileStr);
+    }
 
     public static void main(String [] args) {
+        long start = System.currentTimeMillis();
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationcontext.xml");
         Demo demo = (Demo)context.getBean("demo");
 //        Scanner scanner = new Scanner(System.in);
@@ -242,6 +203,9 @@ public class Demo {
 //        if(scanner.next() != null) {
 //            demo.outGreatSqlByFreeMarkerGreat();
 //        }
-            demo.outSQL();
+
+            demo.test();
+            long end = System.currentTimeMillis();
+            log.info("总耗时:{}秒",(end - start)/1000);
     }
 }

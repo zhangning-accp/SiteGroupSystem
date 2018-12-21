@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Created by zn on 2018/12/15.
  */
 public interface IOptionValueInfoRepository extends JpaRepository<LcOptionValuesInfoEntity,Integer> {
+    LcOptionValuesInfoEntity findByValueId(int valueId);
 }

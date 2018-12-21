@@ -56,7 +56,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "name")
     public String getName() {
-        return escapeSingleQuotes(name);
+        return name;
     }
 
     public void setName(String name) {
@@ -66,7 +66,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "short_description")
     public String getShortDescription() {
-        return escapeSingleQuotes(shortDescription);
+        return shortDescription;
     }
 
     public void setShortDescription(String shortDescription) {
@@ -76,7 +76,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "description")
     public String getDescription() {
-        return escapeSingleQuotes(description);
+        return description;
     }
 
     public void setDescription(String description) {
@@ -86,7 +86,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "head_title")
     public String getHeadTitle() {
-        return escapeSingleQuotes(headTitle);
+        return headTitle;
     }
 
     public void setHeadTitle(String headTitle) {
@@ -96,7 +96,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "h1_title")
     public String getH1Title() {
-        return escapeSingleQuotes(h1Title);
+        return h1Title;
     }
 
     public void setH1Title(String h1Title) {
@@ -106,7 +106,7 @@ public class LcCategoriesInfoEntity {
     @Basic
     @Column(name = "meta_description")
     public String getMetaDescription() {
-        return escapeSingleQuotes(metaDescription);
+        return metaDescription;
     }
 
     public void setMetaDescription(String metaDescription) {

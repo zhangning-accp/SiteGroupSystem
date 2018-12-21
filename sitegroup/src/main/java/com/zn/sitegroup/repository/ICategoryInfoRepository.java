@@ -2,6 +2,7 @@ package com.zn.sitegroup.repository;
 
 import com.zn.sitegroup.entity.LcCategoriesInfoEntity;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +16,7 @@ public interface ICategoryInfoRepository extends JpaRepository<LcCategoriesInfoE
 //            "FROM LcCategoriesEntity as categories,LcCategoriesInfoEntity as categoriesInfo " +
 //            "WHERE categories.parentId =?1 AND categoriesInfo.categoryId=categories.id")
 //    List findChildCategoriesByParentId(int parentId);
+
+    LcCategoriesInfoEntity findByCategoryId(int categoryId);
+
 }

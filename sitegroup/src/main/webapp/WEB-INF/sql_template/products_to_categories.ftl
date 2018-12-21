@@ -1,0 +1,2 @@
+<#setting number_format="#">REPLACE INTO `lc_products_to_categories` VALUES<#list datas as data><#if data?is_last>(${data.productId},${data.categoryId});
+<#else>(${data.productId},${data.categoryId}),</#if></#list>
