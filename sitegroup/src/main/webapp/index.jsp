@@ -11,13 +11,15 @@
     <title>$Title$</title>
   </head>
   <body>
-  <form action="assgin.do">
+  <form action="assgin.do" method="post">
     <label>Category:</label><input type="text" name="category_id">
-    <label>Command:</label><input type="text" value="mysql -uroot litecart_no_data < d://sql-test//assgin.sql" name="command">
-    <input type="submit" value="Start assgin data">
+    <label>site ips:</label>
+    <textarea rows="20" cols="20" name="site_ips"></textarea></br>
+    <input type="radio" name="isNoReaderDB" value="1">使用已存在的sql文件
+    <input type="radio" name="isNoReaderDB" value="0" checked="checked">读取数据库生成sql文件
+    <input type="text" name="sql_zip_file" value="D:/sql-test/site_assgin.zip">
+    <input type="submit" value="分发数据">
   </form>
-
-
   <h3> <%=session.getAttribute("message")%></h3>
   </body>
 </html>

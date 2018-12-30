@@ -7,7 +7,7 @@ import java.util.List;
  * Created by zn on 2018/12/14.
  */
 public class Test {
-    public static void main(String ... args) {
+    public static void builderSql() {
         List list = new ArrayList<>();
 
         for(int i = 0;i < 33; i ++) {
@@ -46,5 +46,9 @@ public class Test {
             }
         }
         System.out.println(buffer);
+    }
+    public static void main(String ... args) {
+        String ip = "192.168.1.1";
+        System.out.print(ip.replaceAll("\\.",""));
     }
 }

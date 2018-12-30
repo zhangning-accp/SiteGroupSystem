@@ -26,9 +26,12 @@ public class ZipUnZipUtils {
                 String fileName = file.substring(file.lastIndexOf(File.separator) + 1);
                 zipOutputStream.putNextEntry(new ZipEntry(fileName));
                 try (FileInputStream inputStream = new FileInputStream(src);) {
-                    byte[] data = new byte[(int)src.length()];
-                    while (inputStream.read(data) != -1) {
-                        zipOutputStream.write(data);
+                    long length = src.length();
+                    length = length/1024;
+                    byte[] data = new byte[(int)length];
+                    int count = -1;
+                    while ((count = inputStream.read(data)) != -1) {
+                        zipOutputStream.write(data,0,count);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
