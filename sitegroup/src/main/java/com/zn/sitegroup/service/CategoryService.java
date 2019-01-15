@@ -9,15 +9,11 @@ import com.zn.sitegroup.repository.ICategoryInfoRepository;
 import com.zn.sitegroup.repository.ICategoryRepository;
 import com.zn.sitegroup.repository.IProductRepository;
 import com.zn.sitegroup.repository.IProductToCategoryRepository;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * Created by zn on 2018/12/16.
@@ -59,7 +55,7 @@ public class CategoryService {
 
             } else {
                 // 找到当前分类下的一级分类
-                categoryChildren = findParentFirstChildren(categoryId);
+                categoryChildren = findFirstChildren(categoryId);
             }
             log.info("categoryId:{} 子分类获取完毕开始获取商品数据，子分类size:{}",categoryId,categoryChildren.size());
 
@@ -104,14 +100,13 @@ public class CategoryService {
         return productsEntityList;
     }
 
-
     /**
      * Not test
-     * 查询指定父类下直接孩子分类。获取该父类下的所有孩子，返回的list里不包含parentId对应的父分类信息
+     * 查询指定父分类id下直接孩子分类(一级子分类)。返回的list里不包含parentId对应的父分类信息
      * @param parentId
       * @return 返回CategoryDto对象
      */
-    private List<CategoryDto> findParentFirstChildren(int parentId) {
+    private List<CategoryDto> findFirstChildren(int parentId) {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         List<LcCategoriesEntity> childrenId = categoryRepository.findByParentId(parentId);
         CategoryDto categoryDto = null;

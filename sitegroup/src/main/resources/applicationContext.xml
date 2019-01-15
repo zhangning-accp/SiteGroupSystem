@@ -75,7 +75,7 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</prop>
                 <!--<prop key="hibernate.show_sql">true</prop>&lt;!&ndash;执行的时候是否显示SQL&ndash;&gt;-->
                 <!--<prop key="hibernate.format_sql">true</prop>&lt;!&ndash;执行的时候SQL是否格式化&ndash;&gt;-->
-                <!--<prop key="hibernate.hbm2ddl.auto">update</prop>&lt;!&ndash;如果没有是否创建&ndash;&gt;-->
+                <prop key="hibernate.hbm2ddl.auto">update</prop><!--如果没有是否创建-->
             </props>
         </property>
     </bean>

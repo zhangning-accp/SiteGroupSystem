@@ -21,9 +21,11 @@ public class TemplateUtil {
     }
     private static void resetConfiguration() {
         try {
-            freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
-            freemarkerConfiguration.setDefaultEncoding("UTF-8");
-            freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            if(!StringUtil.isBlank(sqlTemplatePath)) {
+                freemarkerConfiguration.setDirectoryForTemplateLoading(new File(sqlTemplatePath));
+                freemarkerConfiguration.setDefaultEncoding("UTF-8");
+                freemarkerConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

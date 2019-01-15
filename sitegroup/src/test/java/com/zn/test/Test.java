@@ -1,5 +1,6 @@
 package com.zn.test;
 
+import com.zn.sitegroup.service.BuilderDockerComposeYmlService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,12 @@ public class Test {
         System.out.println(buffer);
     }
     public static void main(String ... args) {
-        String ip = "192.168.1.1";
-        System.out.print(ip.replaceAll("\\.",""));
+        System.out.print("start....");
+        BuilderDockerComposeYmlService service = new BuilderDockerComposeYmlService();
+        String templateFolder = "D:\\project\\idea\\SiteGroupSystem\\sitegroup\\src\\main\\resources";
+        String ftlFile = "docker-compose.ftl";
+        String ymlFolder = "D:\\跨境电商\\站群-部署\\dep\\dep-server\\dep\\20190101\\";
+        service.builder(templateFolder,ftlFile,ymlFolder,100);
+       System.out.print("end....");
     }
 }
