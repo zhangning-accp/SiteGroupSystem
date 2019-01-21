@@ -38,7 +38,7 @@ public class CategoryService {
      * @param isAll 找到分类下所有商品(递归所有子分类)。如果为false，只找属于当前分类下的商品
      * @return
      */
-    List<LcProductsEntity> findProductsByCategoryContainAllChildrenCategory(int categoryId,boolean isAll) {
+    List<LcProductsEntity> findProductsByCategoryContainAllChildrenCategory(long categoryId,boolean isAll) {
         List<LcProductsEntity> productsEntityList = new ArrayList<>();
         // 因为一个产品可能属于父分类也可能属于子分类，所以要先去重，减少对象量。同时也能减少sql语句的量
         Set<LcProductsEntity> productsEntitySet = new HashSet<>();
@@ -106,7 +106,7 @@ public class CategoryService {
      * @param parentId
       * @return 返回CategoryDto对象
      */
-    private List<CategoryDto> findFirstChildren(int parentId) {
+    private List<CategoryDto> findFirstChildren(long parentId) {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         List<LcCategoriesEntity> childrenId = categoryRepository.findByParentId(parentId);
         CategoryDto categoryDto = null;
@@ -125,7 +125,7 @@ public class CategoryService {
      * @param parentId
      * @return
      */
-   private List<CategoryDto> findParentAllChildern(int parentId) {
+   private List<CategoryDto> findParentAllChildern(long parentId) {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         CategoryDto categoryDto = null;
         if (parentId < 1) {
@@ -138,8 +138,8 @@ public class CategoryService {
                 categoryDtoList.add(categoryDto);
             }
         } else {
-            List<Integer> childsId = categoryRepository.findParentAllChildrenId(parentId);
-            for (int id : childsId) {
+            List<Long> childsId = categoryRepository.findParentAllChildrenId(parentId);
+            for (long id : childsId) {
                 LcCategoriesEntity child = categoryRepository.findById(id).get();
                 LcCategoriesInfoEntity childInfo = categoryInfoRepository.findByCategoryId(id);
                 categoryDto = builder(child, childInfo, true);
@@ -173,7 +173,7 @@ public class CategoryService {
      * @param categoryId
      * @return
      */
-    private List<CategoryDto> findCategory(int categoryId) {
+    private List<CategoryDto> findCategory(long categoryId) {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         List<LcCategoriesEntity> categoriesEntityList = new ArrayList<>();
         if(categoryId < 1) {// 表示是找根分类下的所有一级子分类

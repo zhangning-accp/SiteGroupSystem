@@ -13,8 +13,8 @@ import static com.zn.sitegroup.utils.StringUtil.escapeSingleQuotes;
 @Entity
 @Table(name = "lc_categories_info", schema = "litecart", catalog = "")
 public class LcCategoriesInfoEntity {
-    private int id;
-    private int categoryId;
+    private long id;
+    private long categoryId;
     private String languageCode;
     private String name;
     private String shortDescription;
@@ -25,21 +25,21 @@ public class LcCategoriesInfoEntity {
 
     @Id
     @Column(name = "id")
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Basic
     @Column(name = "category_id")
-    public int getCategoryId() {
+    public long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -137,7 +137,7 @@ public class LcCategoriesInfoEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        long result = id;
         result = 31 * result + categoryId;
         result = 31 * result + (languageCode != null ? languageCode.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
@@ -146,6 +146,6 @@ public class LcCategoriesInfoEntity {
         result = 31 * result + (headTitle != null ? headTitle.hashCode() : 0);
         result = 31 * result + (h1Title != null ? h1Title.hashCode() : 0);
         result = 31 * result + (metaDescription != null ? metaDescription.hashCode() : 0);
-        return result;
+        return (int)result;
     }
 }

@@ -1,16 +1,11 @@
 package com.zn.sitegroup;
 
-import com.zn.sitegroup.entity.LcCategoriesEntity;
-import com.zn.sitegroup.entity.LcProductsEntity;
 import com.zn.sitegroup.entity.LcProductsInfoEntity;
 import com.zn.sitegroup.repository.ICategoryInfoRepository;
 import com.zn.sitegroup.repository.ICategoryRepository;
 import com.zn.sitegroup.repository.IProductInfoRepository;
-import com.zn.sitegroup.repository.IProductRepository;
-import com.zn.sitegroup.service.CreateAssignDataSqlFileService;
-import com.zn.sitegroup.service.ProductService;
+import com.zn.sitegroup.service.AssignService;
 import com.zn.sitegroup.utils.StringUtil;
-import com.zn.sitegroup.utils.ZipUnZipUtils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -20,17 +15,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by zn on 2018/12/13.
@@ -46,7 +38,7 @@ public class Demo {
     @Autowired
     ICategoryRepository categoryRepository;
     @Autowired
-    CreateAssignDataSqlFileService createAssignDataSqlFileService;
+    AssignService createAssignDataSqlFileService;
 
     // 这个效率更高
     public void outGreatSqlByFreeMarkerGreat() {

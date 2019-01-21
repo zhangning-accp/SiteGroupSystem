@@ -11,9 +11,9 @@ import lombok.Data;
  */
 @Data
 public class CategoryDto {
-    private int categoryId;
-    private int parentId;
-    private int googleTaxonomyId;
+    private long categoryId;
+    private long parentId;
+    private long googleTaxonomyId;
     private byte status;
     private String code;
     private String listStyle;
@@ -24,7 +24,7 @@ public class CategoryDto {
     private Date dateUpdated;
     private Date dateCreated;
 
-    private int categoryInfoId;
+    private long categoryInfoId;
     private String languageCode;
     private String name;
     private String shortDescription;

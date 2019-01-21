@@ -26,7 +26,7 @@ public class ApplicationConfig {
     public static String PRODUCTS_PRICES_FTL = "products_prices.ftl";
     public static String PRODUCTS_TO_CATEGORIES_FTL = "products_to_categories.ftl";
     public static String SQL_FOLDER = "";
-    public static String SQL_FILE_NAME = "";
+//    public static String SQL_FILE_NAME = "";
     public static String SQL_ZIP_FOLDER = "";
-    public static String SQL_ZIP_FILE_NAME = "";
+//    public static String SQL_ZIP_FILE_NAME = "";
 }

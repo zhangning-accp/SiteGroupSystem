@@ -13,9 +13,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "lc_categories", schema = "litecart", catalog = "")
 public class LcCategoriesEntity {
-    private int id;
-    private int parentId;
-    private int googleTaxonomyId;
+    private long id;
+    private long parentId;
+    private long googleTaxonomyId;
     private byte status;
     private String code;
     private String listStyle;
@@ -28,31 +28,31 @@ public class LcCategoriesEntity {
 
     @Id
     @Column(name = "id")
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Basic
     @Column(name = "parent_id")
-    public int getParentId() {
+    public long getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(long parentId) {
         this.parentId = parentId;
     }
 
     @Basic
     @Column(name = "google_taxonomy_id")
-    public int getGoogleTaxonomyId() {
+    public long getGoogleTaxonomyId() {
         return googleTaxonomyId;
     }
 
-    public void setGoogleTaxonomyId(int googleTaxonomyId) {
+    public void setGoogleTaxonomyId(long googleTaxonomyId) {
         this.googleTaxonomyId = googleTaxonomyId;
     }
 
@@ -171,7 +171,7 @@ public class LcCategoriesEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        long result = id;
         result = 31 * result + parentId;
         result = 31 * result + googleTaxonomyId;
         result = 31 * result + (int) status;
@@ -183,6 +183,6 @@ public class LcCategoriesEntity {
         result = 31 * result + (int) priority;
         result = 31 * result + (dateUpdated != null ? dateUpdated.hashCode() : 0);
         result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
-        return result;
+        return (int)result;
     }
 }

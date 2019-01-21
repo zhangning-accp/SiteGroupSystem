@@ -1,15 +1,18 @@
 package com.zn.sitegroup.servlet;
 
 import com.zn.sitegroup.ApplicationConfig;
-import com.zn.sitegroup.service.CreateAssignDataSqlFileService;
+import com.zn.sitegroup.dto.AssginDto;
+import com.zn.sitegroup.entity.DcAssginEntity;
+import com.zn.sitegroup.entity.DcRulesEntity;
+import com.zn.sitegroup.service.AssignService;
 import com.zn.sitegroup.service.UploadFileService;
-import com.zn.sitegroup.utils.CommandUtil;
+import com.zn.sitegroup.utils.SequenceUtil;
 import com.zn.sitegroup.utils.StringUtil;
 import com.zn.sitegroup.utils.ZipUnZipUtils;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Properties;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -22,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.ResponseBody;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
@@ -35,7 +37,7 @@ public class AssginServlet extends HttpServlet {
     private String logFolder = "";
     private String [] siteIps = null;
     private String siteAssginServiceUrl = "";
-    private CreateAssignDataSqlFileService createAssignDataSqlFileService;
+    private AssignService assignService;
     private ApplicationContext context;
     @Override
     public void init() throws ServletException {
@@ -49,7 +51,7 @@ public class AssginServlet extends HttpServlet {
         log.info("realPath:{},configFolder:{},logFolder:{},applicationPath:{}",
                 realPath,configFolder,logFolder,applicationPath);
         context = new FileSystemXmlApplicationContext(applicationPath);
-        createAssignDataSqlFileService = (CreateAssignDataSqlFileService)context.getBean("createAssignDataSqlFileService");
+        assignService = (AssignService)context.getBean("assignService");
         ApplicationConfig.FTL_TEMPLATE_FOLDER = realPath + "WEB-INF/sql_template/";
         Properties properties = new Properties();
         try {
@@ -58,9 +60,9 @@ public class AssginServlet extends HttpServlet {
             e.printStackTrace();
         }
         ApplicationConfig.SQL_FOLDER = properties.getProperty("sql.folder");
-        ApplicationConfig.SQL_FILE_NAME = properties.getProperty("sql.fileName");
+//        ApplicationConfig.SQL_FILE_NAME = properties.getProperty("sql.fileName");
         ApplicationConfig.SQL_ZIP_FOLDER = properties.getProperty("sql.zip.folder");
-        ApplicationConfig.SQL_ZIP_FILE_NAME = properties.getProperty("sql.zip.fileName");
+//        ApplicationConfig.SQL_ZIP_FILE_NAME = properties.getProperty("sql.zip.fileName");
 //        siteIps = properties.getProperty("site.ip").split("|");
         siteAssginServiceUrl = properties.getProperty("site.assgin.service.url");
         super.init();
@@ -70,6 +72,13 @@ public class AssginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = "";
 
+        //1 拿到以下数据:规则id，分发站点的数据，目录数据，时间数据
+        String ruleId = null;
+        String websites = null;
+        String categories = null;
+        Date from = null;
+        Date to = null;
+        String fileName = null;
         String [] siteIps = request.getParameter("site_ips").toString().split("\r\n");
             //TODO: 1. 需要解决多站点多文件的问题。 2. 采用多线程
 //            String sqlFile = ApplicationConfig.SQL_FOLDER + ApplicationConfig.SQL_FILE_NAME;
@@ -80,8 +89,8 @@ public class AssginServlet extends HttpServlet {
         String localSql = request.getParameter("isNoReaderDB");
         long end = System.currentTimeMillis();
         long start = System.currentTimeMillis();
-            String sqlFile = ApplicationConfig.SQL_FOLDER + ApplicationConfig.SQL_FILE_NAME;
-            String zipFile = ApplicationConfig.SQL_ZIP_FOLDER + ApplicationConfig.SQL_ZIP_FILE_NAME;
+            String sqlFile = ApplicationConfig.SQL_FOLDER + fileName;
+            String zipFile = ApplicationConfig.SQL_ZIP_FOLDER + fileName + ".zip";
             if(localSql.equals("1")) {
                 // 使用本地sql.zip
                 log.info("本次操作是读取本地sql zip文件到子站");
@@ -92,12 +101,27 @@ public class AssginServlet extends HttpServlet {
                 file = new File(zipFile);
                 file.delete();
                 log.info("收到请求，开始导出数据.... sqlFile:{},zipFile:{}",sqlFile,zipFile);
-                String categoryId = request.getParameter("category_id");
-                if (StringUtil.isBlank(categoryId)) {
-                    categoryId = "0";
-                }
                 start = System.currentTimeMillis();
-                createAssignDataSqlFileService.createSqlFileByCategoryID(Integer.parseInt(categoryId));
+                // 构建AssginDto对象
+                AssginDto assginDto = new AssginDto();
+                //1. 根据id查询rule
+                DcRulesEntity rulesEntity = assignService.getAssginEntity(Long.parseLong(ruleId));
+                //2. 构建assgin对象并入库
+                DcAssginEntity assginEntity = new DcAssginEntity();
+                assginEntity.setId(SequenceUtil.sequence());
+                assginEntity.setCategories(categories);
+                assginEntity.setDateCreated(new Date());
+                assginEntity.setDateUpdated(new Date());
+                assginEntity.setDateFrom(from);
+                assginEntity.setDateTo(to);
+                assginEntity.setFileName(fileName);
+                assginEntity.setSites(websites);
+                assignService.saveAssgin(assginEntity);
+
+                assginDto.setAssginEntity(assginEntity);
+                assginDto.setRulesEntity(rulesEntity);
+
+                assignService.createSqlFile(assginDto);
                 log.info("sql文件全部生成完毕..,开始压缩{}", sqlFile);
                 end = System.currentTimeMillis();
                 ZipUnZipUtils.zip(zipFile, sqlFile);
@@ -120,7 +144,7 @@ public class AssginServlet extends HttpServlet {
             }
             UploadFileService uploadFileService = new UploadFileService();
             ResponseBody responseBody = uploadFileService.upload(siteAssginServiceUrl,
-                    zipFile, ApplicationConfig.SQL_ZIP_FILE_NAME,infos[1],infos[2]);
+                    zipFile, zipFile,infos[1],infos[2]);
             start = System.currentTimeMillis();
             String responseText = responseBody.string();
             log.info("入库完毕，耗时:{}秒，子站{}返回的信息：{}", (start - end) / 1000.0, siteIp,responseText);
@@ -135,4 +159,6 @@ public class AssginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
+
+
 }
