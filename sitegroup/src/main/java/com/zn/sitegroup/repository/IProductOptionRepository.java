@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by zn on 2018/12/15.
  */
-public interface IProductOptionRepository extends JpaRepository<LcProductsOptionsEntity,Integer> {
-    List<LcProductsOptionsEntity> findByProductId(int productId);
+public interface IProductOptionRepository extends JpaRepository<LcProductsOptionsEntity,Long> {
+    List<LcProductsOptionsEntity> findByProductId(long productId);
 }

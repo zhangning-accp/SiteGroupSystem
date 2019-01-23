@@ -9,6 +9,7 @@ import com.zn.sitegroup.repository.ICategoryInfoRepository;
 import com.zn.sitegroup.repository.ICategoryRepository;
 import com.zn.sitegroup.repository.IProductRepository;
 import com.zn.sitegroup.repository.IProductToCategoryRepository;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,11 +122,11 @@ public class CategoryService {
 
     /**
      * Not test
-     * 获取该父类下的所有孩子，返回的结果不包含parentId对应的父分类信息
+     * 获取该父类下的所有孩子，但是没有层级嵌套，是平行结构。返回的结果不包含parentId对应的父分类信息
      * @param parentId
      * @return
      */
-   private List<CategoryDto> findParentAllChildern(long parentId) {
+   public List<CategoryDto> findParentAllChildern(long parentId) {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         CategoryDto categoryDto = null;
         if (parentId < 1) {
@@ -139,11 +140,13 @@ public class CategoryService {
             }
         } else {
             List<Long> childsId = categoryRepository.findParentAllChildrenId(parentId);
-            for (long id : childsId) {
-                LcCategoriesEntity child = categoryRepository.findById(id).get();
-                LcCategoriesInfoEntity childInfo = categoryInfoRepository.findByCategoryId(id);
-                categoryDto = builder(child, childInfo, true);
-                categoryDtoList.add(categoryDto);
+             for (int i = 0; i < childsId.size(); i++) {
+                 String idString = childsId.get(i)+"";
+                 long id = Long.parseLong(idString);
+                 LcCategoriesEntity child = categoryRepository.findById(id).get();
+                 LcCategoriesInfoEntity childInfo = categoryInfoRepository.findByCategoryId(id);
+                 categoryDto = builder(child, childInfo, true);
+                 categoryDtoList.add(categoryDto);
             }
         }
         return categoryDtoList;
@@ -151,17 +154,18 @@ public class CategoryService {
 
     /**
      * Not test
-     * 返回子类所有的父类，返回的信息里包含子类，数据由父到子排列。
+     * 返回子类所有的父类，返回的信息里包含childId代表的子类，数据由父到子排列。
      * @param childId
      * @return
      */
-    private List<CategoryDto> findChildParents(int childId) {
+    public List<CategoryDto> findChildParents(long childId) {
+        // 查询当前分类的所有父分类
         List<LcCategoriesEntity> parents = categoryRepository.findChildParents(childId);
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         CategoryDto categoryDto = null;
         for(LcCategoriesEntity parent : parents) {
             LcCategoriesInfoEntity parentInfo = categoryInfoRepository.findByCategoryId(parent.getId());
-            categoryDto = builder(parent,parentInfo,false);
+            categoryDto = builder(parent,parentInfo,true);
             categoryDtoList.add(categoryDto);
         }
 
@@ -169,11 +173,11 @@ public class CategoryService {
     }
 
     /**
-     *
+     * 获取当前分类的信息，如果categoryId为0，表示是找默认的根分类，此时方法会返回根分类下的一级子分类。
      * @param categoryId
      * @return
      */
-    private List<CategoryDto> findCategory(long categoryId) {
+    public List<CategoryDto> findCategory(long categoryId) {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         List<LcCategoriesEntity> categoriesEntityList = new ArrayList<>();
         if(categoryId < 1) {// 表示是找根分类下的所有一级子分类
@@ -187,7 +191,6 @@ public class CategoryService {
             categoryDtoList.add(categoryDto);
         }
         return categoryDtoList;
-
     }
 
     /**
@@ -207,6 +210,7 @@ public class CategoryService {
         } else {
             categoryDto.setParentId(categoriesEntity.getId());
         }
+//        categoryDto.setParentId(categoriesEntity.getParentId());
         categoryDto.setGoogleTaxonomyId(categoriesEntity.getGoogleTaxonomyId());
         categoryDto.setStatus(categoriesEntity.getStatus());
         categoryDto.setCode(categoriesEntity.getCode());

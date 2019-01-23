@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create-Rules</title>
+    <link rel="stylesheet" href="js/jstree3.3.7/dist/themes/default/style.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <script src="js/jstree3.3.7/dist/jstree.js"></script>
+    <script src="js/url.js"></script>
+</head>
+<body>
+<div id="ball_uniform"></div>
+<div id="t_shirts"></div>
+
+
+<div id="tree">
+
+</div>
+</body>
+<script>
+    $(function() {
+        $.post(url.categoryUrl, {"category_id":"0"},function (data) {
+            var newData = data;
+            for(index in newData){
+                if(newData[index].parentId === 0) {
+                    newData[index].parent = "#";
+                } else {
+                    newData[index].parent = newData[index].parentId + "";
+                }
+                newData[index].text = newData[index].text + "-" + newData[index].id + "-" + newData[index].parent;
+            }
+            $('#tree').on('changed.jstree',function (event,data) {
+                var node = data.node;
+                alert(node.text + node.id + node.parent);
+                alert(data.selected.length);
+                alert(event);
+                
+            }).jstree(
+                {
+                    'plugins': ["checkbox","search"],
+                    'core': {'data':newData}
+                });
+        });
+    });
+        // 使用jquery来发ajax请求，然后生成jstree实例试试。
+//    $(function () {
+////        $('#jstree1').jstree();
+//        $('#tree').jstree({'plugins':["checkbox"], 'core' : {
+//            'data' : [{"text":"Custom Jersey","id":5508,"parent":5507},
+//                {"text":"NTL","id":5507,"parent":"#"}
+//                ]
+//        }});
+//    });
+
+</script>
+</html>

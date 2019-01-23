@@ -19,7 +19,7 @@ public interface ICategoryInfoRepository extends JpaRepository<LcCategoriesInfoE
 
     LcCategoriesInfoEntity findByCategoryId(long categoryId);
 
-    @Query(value="SELECT * FROM LcCategoriesInfoEntity where categoryId in(:categoryIds)")
-    List<LcCategoriesInfoEntity> find(@Param("categoryIds") List<Long> categoryIds);
+//    @Query(value="SELECT * FROM LcCategoriesInfoEntity where categoryId in(:categoryIds)")
+//    List<LcCategoriesInfoEntity> find(@Param("categoryIds") List<Long> categoryIds);
 
 }

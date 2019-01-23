@@ -1,5 +1,6 @@
 package com.zn.sitegroup.jsonbean;
 
+import java.util.List;
 import lombok.Data;
 import lombok.ToString;
 
@@ -9,6 +10,9 @@ import lombok.ToString;
 @Data
 @ToString
 public class CategoryJsonBean {
-    private String name;
+    private String text;
     private long id;
+    private long parentId;
+//    boolean isChildren;
+//    private List<CategoryJsonBean> childrens;
 }

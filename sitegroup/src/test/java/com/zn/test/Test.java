@@ -22,6 +22,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public class Test {
 
     public static void testJackson() {
+        List<Long> list1 = new ArrayList<>();
+
         String json = "[\n" +
                 "    {\n" +
                 "        \"name\": \"j\", \n" +

@@ -27,6 +27,7 @@ import com.zn.sitegroup.entity.LcProductsOptionsStockEntity;
 import com.zn.sitegroup.entity.LcProductsPricesEntity;
 import com.zn.sitegroup.entity.LcProductsToCategoriesEntity;
 import com.zn.sitegroup.jsonbean.CategoryJsonBean;
+import com.zn.sitegroup.jsonbean.OptionGroupJsonBean;
 import com.zn.sitegroup.jsonbean.ProductGroupJsonBean;
 import com.zn.sitegroup.repository.IAssginRepository;
 import com.zn.sitegroup.repository.ICategoryInfoRepository;
@@ -49,6 +50,7 @@ import com.zn.sitegroup.repository.IProductPriceRepository;
 import com.zn.sitegroup.repository.IProductRepository;
 import com.zn.sitegroup.repository.IProductToCategoryRepository;
 import com.zn.sitegroup.utils.JsonUtil;
+import com.zn.sitegroup.utils.SequenceUtil;
 import com.zn.sitegroup.utils.StringUtil;
 import com.zn.sitegroup.utils.TemplateUtil;
 import com.zn.sitegroup.utils.ZipUnZipUtils;
@@ -61,6 +63,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -217,7 +220,7 @@ public class AssignService {
             // 3 获取分类的id集合，并得到分类的info信息
             List<Long> categoryIds = categoriesEntityList.stream().map(LcCategoriesEntity::getId)
                     .distinct().collect(Collectors.toList());
-            categoriesInfoEntityList = categoryInfoRepository.find(categoryIds);
+//            categoriesInfoEntityList = categoryInfoRepository.find(categoryIds);
 
             // 4. 生成sql数据文件。
             builderReplaceIntoSqlFile(ApplicationConfig.FTL_TEMPLATE_FOLDER,
@@ -380,6 +383,11 @@ public class AssignService {
         if(productGroups.lastIndexOf(",") == productGroups.length() - 1) {
             productGroups.delete(productGroups.length() - 1,productGroups.length());
         }
+        String optionGroupJsonString = assginDto.getRulesEntity().getOptionGroups();
+        List<OptionGroupJsonBean> optionGroupJsonBeanList = JsonUtil.getArrayByJsonString(optionGroupJsonString,
+                    new TypeReference<OptionGroupJsonBean>() {});
+
+        // end
         log.info("开始获取每个商品的特定数据,商品数量:{}",products.size());
         int size = products.size();
         int count = 0;
@@ -394,7 +402,7 @@ public class AssignService {
             product.setQuantity(quantity);
             product.setProductGroups(productGroups.toString());
             // 为了减少内存使用，这里需要分批处理，每达到1000个商品就生成一次sql文件
-            int productId = product.getId();
+            long productId = product.getId();
             //        7 `lc_products` product_id
             //        8 `lc_products_info` product_id
             LcProductsInfoEntity productInfo = productInfoRepository.findByProductId(productId);
@@ -411,6 +419,7 @@ public class AssignService {
             pricesEntityList.stream().forEach(productPrice->{
                 productPrice.setUsd(price);
             });
+
             productsPricesEntityList.addAll(pricesEntityList);
 
             // 12 `lc_products_to_categories` product_id TODO:这里逻辑不对，应该按照实际分发时的逻辑来
@@ -418,20 +427,78 @@ public class AssignService {
             /*product end*/
             /************ 一下是 product option 的处理 ***********************
              * lc_product_option_trees的处理逻辑
-             * 1.
+             * 1. 首先获取规则里的 trees,然后生成product_option_trees数据。不过这个需要根据children来判断，如果没有children就生成product_options数据不需要这一步。
              *
              *
-             * lc_product_options的处理逻辑
+             * lc_product_options的处理逻辑，当children不存在时，生成lc_product_options数据。
+             *
              */
+            List<LcProductOptionTreesEntity> treesEntityList = new ArrayList<>();
+            List<LcProductsOptionsEntity> optionsEntityList = new ArrayList<>();
+            for(OptionGroupJsonBean bean:optionGroupJsonBeanList) {
+                long parentGroupId = bean.getGroupId();
+                long parentValueId = bean.getValueId();
+                String links = bean.getLinks();
+                Date dateUpdated = new Date();
+                Date dateCreated = dateUpdated;
+                LcProductOptionTreesEntity treesEntity = new LcProductOptionTreesEntity();
+                long id = SequenceUtil.sequence();
+                // 这里按照T恤的设计，第一个通常就是style。
+                treesEntity.setId(id);
+                treesEntity.setGroupId(parentGroupId);
+                treesEntity.setValueId(parentValueId);
+                treesEntity.setLinks(links);
+                treesEntity.setParentGroupId(0);//
+                treesEntity.setParentValueId(0);//
+                treesEntity.setProductId(productId);
+                treesEntity.setDateCreated(dateCreated);
+                treesEntity.setDateUpdate(dateUpdated);
+                List<OptionGroupJsonBean> children = bean.getChildren();
+                if(children.size() > 0) {// 构建trees数据
+                    for(OptionGroupJsonBean child : children) {
+                        id = SequenceUtil.sequence();
+                        long valueId = child.getValueId();
+                        long groupId = child.getGroupId();
+                        String valueLink = child.getLinks();
+                        treesEntity = new LcProductOptionTreesEntity();
+                        treesEntity.setId(id);
+                        treesEntity.setGroupId(groupId);
+                        treesEntity.setValueId(valueId);
+                        treesEntity.setLinks(valueLink);
+                        treesEntity.setParentGroupId(parentGroupId);
+                        treesEntity.setParentValueId(parentValueId);
+                        treesEntity.setProductId(productId);
+                        treesEntity.setDateCreated(dateCreated);
+                        treesEntity.setDateUpdate(dateUpdated);
 
+                        treesEntityList.add(treesEntity);
+                    }
+                }
+                // 按照理论说如果有children就不应该生成lc_product_options数据，不过为了避免潜在的bug，这里无论什么情况都会生成
+                LcProductsOptionsEntity productsOptionsEntity = new LcProductsOptionsEntity();
+                productsOptionsEntity.setId(SequenceUtil.sequence());
+                productsOptionsEntity.setLinks("");
+                productsOptionsEntity.setGroupId(parentGroupId);
+                productsOptionsEntity.setValueId(parentValueId);
+                productsOptionsEntity.setProductId(productId);
+                productsOptionsEntity.setDateCreated(new Date());
+                productsOptionsEntity.setDateUpdated(new Date());
+
+                optionsEntityList.add(productsOptionsEntity);
+            }
         //         17 `lc_product_option_trees` product_id // 这里需要根据dc_option_trees来生成，数据中心lc_product_option_trees不保存数据。
-            productOptionTreesEntityList.addAll(productOptionTreeRepository.findByProductId(productId));
+//            productOptionTreesEntityList.addAll(productOptionTreeRepository.findByProductId(productId));
+            //TODO: 问题：如果第二次相同，那么这个数据发到站点怎么办？因为id不同，所以会被识别为新的数据。这里需要考虑如何处理，以下以也是.
+            // lc_product_option_trees和lc_products_options考虑使用符合主键。避免id带来的更新问题。
+            productOptionTreesEntityList.addAll(treesEntityList);
             //         18 `lc_products_options` product_id 这个地方也应该要重新处理，数据中心不应该保存该数据。
-            List<LcProductsOptionsEntity> productsOptionsList = productOptionRepository.findByProductId(productId);
-            productsOptionsEntityList.addAll(productsOptionsList);
+//            List<LcProductsOptionsEntity> productsOptionsList = productOptionRepository.findByProductId(productId);
+//            productsOptionsEntityList.addAll(productsOptionsList);
+
+            productsOptionsEntityList.addAll(optionsEntityList);
             //         19 `lc_products_options_stock` product_id// 这里如果没有会怎么样？
             //  litecart的数量实际在购买时并没有修改具体每个option stock的值，只是改了product 表里的总数，所以这个地方原则上是可以不用导出
-//            productsOptionsStockEntityList.addAll(productOptionStockRepository.findByProductId(productId));
+//            productsOptionsStockEntityList.addAll(productOptionStockRepository.findBy ProductId(productId));
 
             /*---- options end */
             count++;

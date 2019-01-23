@@ -1,7 +1,7 @@
 package com.zn.sitegroup.entity;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,55 +14,55 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "lc_products_options", schema = "litecart", catalog = "")
 public class LcProductsOptionsEntity {
-    private int id;
-    private int productId;
-    private int groupId;
-    private int valueId;
-    private String priceOperator;
-    private BigDecimal usd;
-    private BigDecimal eur;
+    private long id;
+    private long productId;
+    private long groupId;
+    private long valueId;
+    private String priceOperator = "+";
+    private BigDecimal usd = new BigDecimal(0);
+    private BigDecimal eur = new BigDecimal(0);
     private String links;
-    private byte priority;
-    private Timestamp dateUpdated;
-    private Timestamp dateCreated;
+    private byte priority = 1;
+    private Date dateUpdated;
+    private Date dateCreated;
 
     @Id
     @Column(name = "id")
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Basic
     @Column(name = "product_id")
-    public int getProductId() {
+    public long getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 
     @Basic
     @Column(name = "group_id")
-    public int getGroupId() {
+    public long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(long groupId) {
         this.groupId = groupId;
     }
 
     @Basic
     @Column(name = "value_id")
-    public int getValueId() {
+    public long getValueId() {
         return valueId;
     }
 
-    public void setValueId(int valueId) {
+    public void setValueId(long valueId) {
         this.valueId = valueId;
     }
 
@@ -118,21 +118,21 @@ public class LcProductsOptionsEntity {
 
     @Basic
     @Column(name = "date_updated")
-    public Timestamp getDateUpdated() {
+    public Date getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(Timestamp dateUpdated) {
+    public void setDateUpdated(Date dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
 
     @Basic
     @Column(name = "date_created")
-    public Timestamp getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -161,7 +161,7 @@ public class LcProductsOptionsEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        long result = id;
         result = 31 * result + productId;
         result = 31 * result + groupId;
         result = 31 * result + valueId;
@@ -169,9 +169,9 @@ public class LcProductsOptionsEntity {
         result = 31 * result + (usd != null ? usd.hashCode() : 0);
         result = 31 * result + (eur != null ? eur.hashCode() : 0);
         result = 31 * result + (links != null ? links.hashCode() : 0);
-        result = 31 * result + (int) priority;
+        result = 31 * result + (long) priority;
         result = 31 * result + (dateUpdated != null ? dateUpdated.hashCode() : 0);
         result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
-        return result;
+        return (int)result;
     }
 }

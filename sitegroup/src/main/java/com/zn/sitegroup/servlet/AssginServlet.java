@@ -42,16 +42,20 @@ public class AssginServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         ServletContext application = this.getServletContext();
-        String realPath = application.getRealPath("/");
-        configFolder = realPath + "WEB-INF/classes/";
-        logFolder = realPath;
-        System.getProperties().setProperty("logFilesPath", logFolder);
-        PropertyConfigurator.configure(configFolder + "log4j.properties");
-        String applicationPath = "/" + configFolder + "applicationContext.xml";
-        log.info("realPath:{},configFolder:{},logFolder:{},applicationPath:{}",
-                realPath,configFolder,logFolder,applicationPath);
+//        String realPath = application.getRealPath("/");
+        configFolder = application.getAttribute("configFolder").toString();
+//        logFolder = realPath;
+//        System.getProperties().setProperty("logFilesPath", logFolder);
+//        PropertyConfigurator.configure(configFolder + "log4j.properties");
+//        String applicationPath = "/" + configFolder + "applicationContext.xml";
+//        log.info("realPath:{},configFolder:{},logFolder:{},applicationPath:{}",
+//                realPath,configFolder,logFolder,applicationPath);
+//        context = (FileSystemXmlApplicationContext)application.getAttribute("context");
+//        new FileSystemXmlApplicationContext(applicationPath);
+        String applicationPath = application.getAttribute("applicationPath").toString();
         context = new FileSystemXmlApplicationContext(applicationPath);
         assignService = (AssignService)context.getBean("assignService");
+        String realPath = application.getAttribute("realPath").toString();
         ApplicationConfig.FTL_TEMPLATE_FOLDER = realPath + "WEB-INF/sql_template/";
         Properties properties = new Properties();
         try {

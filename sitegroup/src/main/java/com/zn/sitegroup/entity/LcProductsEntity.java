@@ -15,13 +15,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "lc_products", schema = "litecart", catalog = "")
 public class LcProductsEntity {
-    private int id;
+    private long id;
     private byte status;
-    private int manufacturerId;
-    private int supplierId;
-    private int deliveryStatusId;
-    private int soldOutStatusId;
-    private int defaultCategoryId;
+    private long manufacturerId;
+    private long supplierId;
+    private long deliveryStatusId;
+    private long soldOutStatusId;
+    private long defaultCategoryId;
     private String productGroups;
     private String keywords;
     private String code;
@@ -31,7 +31,7 @@ public class LcProductsEntity {
     private String gtin;
     private String taric;
     private BigDecimal quantity;
-    private int quantityUnitId;
+    private long quantityUnitId;
     private BigDecimal weight;
     private String weightClass;
     private BigDecimal dimX;
@@ -40,10 +40,10 @@ public class LcProductsEntity {
     private String dimClass;
     private BigDecimal purchasePrice;
     private String purchasePriceCurrencyCode;
-    private int taxClassId;
+    private long taxClassId;
     private String image;
-    private int views;
-    private int purchases;
+    private long views;
+    private long purchases;
     private Date dateValidFrom;
     private Date dateValidTo;
     private Timestamp dateUpdated;
@@ -51,11 +51,11 @@ public class LcProductsEntity {
 
     @Id
     @Column(name = "id")
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -71,51 +71,51 @@ public class LcProductsEntity {
 
     @Basic
     @Column(name = "manufacturer_id")
-    public int getManufacturerId() {
+    public long getManufacturerId() {
         return manufacturerId;
     }
 
-    public void setManufacturerId(int manufacturerId) {
+    public void setManufacturerId(long manufacturerId) {
         this.manufacturerId = manufacturerId;
     }
 
     @Basic
     @Column(name = "supplier_id")
-    public int getSupplierId() {
+    public long getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(int supplierId) {
+    public void setSupplierId(long supplierId) {
         this.supplierId = supplierId;
     }
 
     @Basic
     @Column(name = "delivery_status_id")
-    public int getDeliveryStatusId() {
+    public long getDeliveryStatusId() {
         return deliveryStatusId;
     }
 
-    public void setDeliveryStatusId(int deliveryStatusId) {
+    public void setDeliveryStatusId(long deliveryStatusId) {
         this.deliveryStatusId = deliveryStatusId;
     }
 
     @Basic
     @Column(name = "sold_out_status_id")
-    public int getSoldOutStatusId() {
+    public long getSoldOutStatusId() {
         return soldOutStatusId;
     }
 
-    public void setSoldOutStatusId(int soldOutStatusId) {
+    public void setSoldOutStatusId(long soldOutStatusId) {
         this.soldOutStatusId = soldOutStatusId;
     }
 
     @Basic
     @Column(name = "default_category_id")
-    public int getDefaultCategoryId() {
+    public long getDefaultCategoryId() {
         return defaultCategoryId;
     }
 
-    public void setDefaultCategoryId(int defaultCategoryId) {
+    public void setDefaultCategoryId(long defaultCategoryId) {
         this.defaultCategoryId = defaultCategoryId;
     }
 
@@ -211,11 +211,11 @@ public class LcProductsEntity {
 
     @Basic
     @Column(name = "quantity_unit_id")
-    public int getQuantityUnitId() {
+    public long getQuantityUnitId() {
         return quantityUnitId;
     }
 
-    public void setQuantityUnitId(int quantityUnitId) {
+    public void setQuantityUnitId(long quantityUnitId) {
         this.quantityUnitId = quantityUnitId;
     }
 
@@ -301,11 +301,11 @@ public class LcProductsEntity {
 
     @Basic
     @Column(name = "tax_class_id")
-    public int getTaxClassId() {
+    public long getTaxClassId() {
         return taxClassId;
     }
 
-    public void setTaxClassId(int taxClassId) {
+    public void setTaxClassId(long taxClassId) {
         this.taxClassId = taxClassId;
     }
 
@@ -321,21 +321,21 @@ public class LcProductsEntity {
 
     @Basic
     @Column(name = "views")
-    public int getViews() {
+    public long getViews() {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(long views) {
         this.views = views;
     }
 
     @Basic
     @Column(name = "purchases")
-    public int getPurchases() {
+    public long getPurchases() {
         return purchases;
     }
 
-    public void setPurchases(int purchases) {
+    public void setPurchases(long purchases) {
         this.purchases = purchases;
     }
 
@@ -429,8 +429,8 @@ public class LcProductsEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (int) status;
+        long result = id;
+        result = 31 * result + (long) status;
         result = 31 * result + manufacturerId;
         result = 31 * result + supplierId;
         result = 31 * result + deliveryStatusId;
@@ -462,6 +462,6 @@ public class LcProductsEntity {
         result = 31 * result + (dateValidTo != null ? dateValidTo.hashCode() : 0);
         result = 31 * result + (dateUpdated != null ? dateUpdated.hashCode() : 0);
         result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
-        return result;
+        return (int)result;
     }
 }
