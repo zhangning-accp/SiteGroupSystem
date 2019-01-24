@@ -37,20 +37,19 @@ public class ProductGroupService {
         List<LcProductGroupsValuesEntity> productGroupsValuesEntityList = productGroupValueRepository.findAll();
         List<LcProductGroupsValuesInfoEntity> productGroupsValuesInfoEntityList = productGroupValueInfoRepository.findAll();
         ProductGroupDto dto = null;
-        for(LcProductGroupsEntity entity : productGroupsEntityList) {
+        for(LcProductGroupsEntity entity : productGroupsEntityList) {//得到group信息
             dto = new ProductGroupDto();
-            long groupId = entity.getId();
-            // 获取info信息
+            long groupId = entity.getId();//得到当前group id
+            // 获取group info信息
             LcProductGroupsInfoEntity infoEntity = productGroupsInfoEntityList.stream().filter(info->{return info.getProductGroupId() == groupId;}).findFirst().get();
             dto.setName(infoEntity.getName());
             dto.setId(groupId);
-            // 获取value信息
+            // 获取gourp id 下的value信息
             List<LcProductGroupsValuesEntity> values = productGroupsValuesEntityList.stream().filter(value->{
                 return value.getProductGroupId() == groupId;
             }).collect(Collectors.toList());
-            List<ProductGroupDto> valueList = null;
+            List<ProductGroupDto> valueList = new ArrayList<>();
             for(LcProductGroupsValuesEntity value : values) {
-                valueList = new ArrayList<>();
                 long valueId = value.getId();
                 ProductGroupDto valueInfo = new ProductGroupDto();
                 LcProductGroupsValuesInfoEntity groupValuesInfo = productGroupsValuesInfoEntityList.stream().filter(v->{
@@ -61,22 +60,10 @@ public class ProductGroupService {
                 valueList.add(valueInfo);
             }
             dto.setValues(valueList);
+            list.add(dto);
         }
 
         return list;
 
-    }
-
-    private ProductGroupDto builder(LcProductGroupsEntity productGroupsEntity,
-                                    LcProductGroupsInfoEntity productGroupsInfoEntity,
-                                    List<LcProductGroupsValuesEntity> productGroupsValuesEntities,
-                                    List<LcProductGroupsValuesInfoEntity> productGroupsValuesInfoEntities) {
-        ProductGroupDto dto = new ProductGroupDto();
-//        dto.setProductGroupsEntity(productGroupsEntity);
-//        dto.setProductGroupsInfoEntity(productGroupsInfoEntity);
-//        dto.setProductGroupsValuesEntities(productGroupsValuesEntities);
-//        dto.setProductGroupsValuesInfoEntities(productGroupsValuesInfoEntities);
-
-        return dto;
     }
 }

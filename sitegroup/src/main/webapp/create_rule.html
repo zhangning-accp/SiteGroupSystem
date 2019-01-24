@@ -24,8 +24,8 @@
 <div id="size_option"></div>
 </body>
 <script>
-    $(function() {
-        $.post(url.categoryUrl, {"category_id":"0"},function (data) {
+    $(function() {//category
+        $.post(url.categoryUrl, {"category_id":"0","action":"category"},function (data) {
             var newData = data;
             for(index in newData){
                 if(newData[index].parentId === 0) {
@@ -41,6 +41,30 @@
                 alert(data.selected.length);
                 alert(event);
                 
+            }).jstree(
+                {
+                    'plugins': ["checkbox","search"],
+                    'core': {'data':newData}//jstree的树里，必须有一个"parent":"#"，否则显示不出数据
+                });
+        });
+    });
+    $(function() {//product groups，服务器给的是一个tree结构，和category不同。所以处理方式不同。
+        $.post(url.categoryUrl, {"action":"product_group"},function (data) {
+            var newData = data;
+            for(index in newData){
+                newData[index].children = newData[index].values;
+                for(k in newData[index].children){
+                    newData[index].children[k].text = newData[index].children[k].name;
+                }
+                newData[index].text = newData[index].name + "-" + newData[index].id + "-" + newData[index].parent;
+            }
+            alert(newData);
+            $('#product_groups').on('changed.jstree',function (event,data) {
+                var node = data.node;
+                alert(node.text + node.id + node.parent);
+                alert(data.selected.length);
+                alert(event);
+
             }).jstree(
                 {
                     'plugins': ["checkbox","search"],

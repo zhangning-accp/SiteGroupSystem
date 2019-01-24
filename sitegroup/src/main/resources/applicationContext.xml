@@ -17,6 +17,7 @@
     <bean id="demo" class="com.zn.sitegroup.Demo"></bean>
     <bean id="assignService" class="com.zn.sitegroup.service.AssignService"></bean>
     <bean id="categoryService" class="com.zn.sitegroup.service.CategoryService"></bean>
+    <bean id="productGroupService" class="com.zn.sitegroup.service.ProductGroupService"></bean>
     <!-- 配置数据源 -->
     <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
         <!--<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
