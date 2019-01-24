@@ -10,7 +10,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class CategoryJsonBean {
-    private String text;
+    private String name;
     private long id;
     private long parentId;
 //    boolean isChildren;

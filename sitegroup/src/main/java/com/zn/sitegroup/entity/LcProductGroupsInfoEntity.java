@@ -12,28 +12,28 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "lc_product_groups_info", schema = "litecart", catalog = "")
 public class LcProductGroupsInfoEntity {
-    private int id;
-    private int productGroupId;
+    private long id;
+    private long productGroupId;
     private String languageCode;
     private String name;
 
     @Id
     @Column(name = "id")
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Basic
     @Column(name = "product_group_id")
-    public int getProductGroupId() {
+    public long getProductGroupId() {
         return productGroupId;
     }
 
-    public void setProductGroupId(int productGroupId) {
+    public void setProductGroupId(long productGroupId) {
         this.productGroupId = productGroupId;
     }
 
@@ -74,10 +74,10 @@ public class LcProductGroupsInfoEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        long result = id;
         result = 31 * result + productGroupId;
         result = 31 * result + (languageCode != null ? languageCode.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
+        return (int)result;
     }
 }

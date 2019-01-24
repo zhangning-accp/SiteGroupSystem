@@ -13,28 +13,28 @@ import static com.zn.sitegroup.utils.StringUtil.escapeSingleQuotes;
 @Entity
 @Table(name = "lc_product_groups_values_info", schema = "litecart", catalog = "")
 public class LcProductGroupsValuesInfoEntity {
-    private int id;
-    private int productGroupValueId;
+    private long id;
+    private long productGroupValueId;
     private String languageCode;
     private String name;
 
     @Id
     @Column(name = "id")
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Basic
     @Column(name = "product_group_value_id")
-    public int getProductGroupValueId() {
+    public long getProductGroupValueId() {
         return productGroupValueId;
     }
 
-    public void setProductGroupValueId(int productGroupValueId) {
+    public void setProductGroupValueId(long productGroupValueId) {
         this.productGroupValueId = productGroupValueId;
     }
 
@@ -75,10 +75,10 @@ public class LcProductGroupsValuesInfoEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        long result = id;
         result = 31 * result + productGroupValueId;
         result = 31 * result + (languageCode != null ? languageCode.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
+        return (int)result;
     }
 }

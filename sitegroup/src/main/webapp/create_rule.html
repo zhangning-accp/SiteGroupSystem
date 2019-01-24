@@ -12,10 +12,16 @@
 <div id="ball_uniform"></div>
 <div id="t_shirts"></div>
 
-
-<div id="tree">
-
-</div>
+<label>Categories:</label>
+<div id="category_tree"></div>
+<label>Product groups:</label>
+<div id="product_groups"></div>
+<label>Style option</label>
+<div id="style_option"></div>
+<label>Color option</label>
+<div id="color_option"></div>
+<label>Size option</label>
+<div id="size_option"></div>
 </body>
 <script>
     $(function() {
@@ -27,9 +33,9 @@
                 } else {
                     newData[index].parent = newData[index].parentId + "";
                 }
-                newData[index].text = newData[index].text + "-" + newData[index].id + "-" + newData[index].parent;
+                newData[index].text = newData[index].name + "-" + newData[index].id + "-" + newData[index].parent;
             }
-            $('#tree').on('changed.jstree',function (event,data) {
+            $('#category_tree').on('changed.jstree',function (event,data) {
                 var node = data.node;
                 alert(node.text + node.id + node.parent);
                 alert(data.selected.length);
@@ -38,7 +44,7 @@
             }).jstree(
                 {
                     'plugins': ["checkbox","search"],
-                    'core': {'data':newData}
+                    'core': {'data':newData}//jstree的树里，必须有一个"parent":"#"，否则显示不出数据
                 });
         });
     });

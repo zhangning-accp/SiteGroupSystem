@@ -1,6 +1,6 @@
 package com.zn.sitegroup.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,48 +13,48 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "lc_product_groups_values", schema = "litecart", catalog = "")
 public class LcProductGroupsValuesEntity {
-    private int id;
-    private int productGroupId;
-    private Timestamp dateUpdated;
-    private Timestamp dateCreated;
+    private long id;
+    private long productGroupId;
+    private Date dateUpdated;
+    private Date dateCreated;
 
     @Id
     @Column(name = "id")
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Basic
     @Column(name = "product_group_id")
-    public int getProductGroupId() {
+    public long getProductGroupId() {
         return productGroupId;
     }
 
-    public void setProductGroupId(int productGroupId) {
+    public void setProductGroupId(long productGroupId) {
         this.productGroupId = productGroupId;
     }
 
     @Basic
     @Column(name = "date_updated")
-    public Timestamp getDateUpdated() {
+    public Date getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(Timestamp dateUpdated) {
+    public void setDateUpdated(Date dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
 
     @Basic
     @Column(name = "date_created")
-    public Timestamp getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -75,10 +75,10 @@ public class LcProductGroupsValuesEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        long result = id;
         result = 31 * result + productGroupId;
         result = 31 * result + (dateUpdated != null ? dateUpdated.hashCode() : 0);
         result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
-        return result;
+        return (int)result;
     }
 }

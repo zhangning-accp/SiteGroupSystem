@@ -64,7 +64,7 @@ public class CategoryJsonServlet extends HttpServlet {
         for(CategoryDto dto : list) {
             categoryJsonBean = new CategoryJsonBean();
             categoryJsonBean.setId(dto.getCategoryId());
-            categoryJsonBean.setText(dto.getName());
+            categoryJsonBean.setName(dto.getName());
             categoryJsonBean.setParentId(dto.getParentId());
             jsonBeans.add(categoryJsonBean);
         }
